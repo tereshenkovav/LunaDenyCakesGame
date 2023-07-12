@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LunaDenyCakesGame": {
+      "commandName": "Project",
+      "commandLineArgs": "..\\..\\..\\..\\..\\data"
+    }
+  }
+}
