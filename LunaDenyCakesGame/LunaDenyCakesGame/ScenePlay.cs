@@ -23,6 +23,7 @@ namespace LunaDenyCakesGame
         private Sprite action_laser;
         private Sprite action_chicken;
         private Sprite action_jump;
+        private Color[] colorset;
         private float x = 100;
         
         public override void Init()
@@ -47,6 +48,8 @@ namespace LunaDenyCakesGame
             luna_walk.Play();
             luna_wait = new SfmlAnimation("images/luna_wait.png", 6, 6);
             luna_wait.Play();
+
+            colorset = new Color[] { new Color(255, 0, 0), new Color(255, 128, 0), new Color(255, 255, 0), new Color(0, 255, 0) };
         }
 
         public override void UnInit()
@@ -101,6 +104,9 @@ namespace LunaDenyCakesGame
             DrawAt(window, cakes[0], 100 + 4 * 84, 300 - 24);
             DrawAt(window, cakes[1], 100 + 3 * 84, 300 + 110 - 24);
             DrawAt(window, cakes[2], 100 + 7 * 84, 300 + 220 - 24);
+
+            float v = 1.0f-(float)(x-100)/200.0f;
+            DrawIndicator(window, 100 + 4 * 84 - 24, 300 - 24 + 24, 48, 8, v, colorset);
 
             DrawAt(window, chicken, 100 + 2 * 84, 300 + 220 - 30);
 

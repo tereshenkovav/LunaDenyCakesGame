@@ -78,6 +78,36 @@ namespace SfmlNetEngine
             window.Draw(text);
         }
 
+        public void DrawIndicator(RenderWindow window, int x, int y, int w, int h, float v, Color[] colorset)
+        {
+            if (v < 0.0f) v = 0.0f;
+            if (v > 1.0f) v = 1.0f;
+
+            using (RectangleShape rect = new RectangleShape())
+            {
+                rect.Origin = new Vector2f(0, 0);
+                rect.OutlineThickness = 0;
+
+                int teksize = (int)(w * v);
+                rect.Size = new Vector2f(teksize, h);
+                rect.Position = new Vector2f(x, y);
+
+                if (colorset.Length == 1)
+                    rect.FillColor = colorset[0];
+                else
+                {
+                    float dc = 1.0f / colorset.Length;
+                    for (int i = colorset.Length - 1; i >= 0; i--)
+                        if (v > dc * i)
+                        {
+                            rect.FillColor = colorset[i];
+                            break;
+                        }
+                }
+                window.Draw(rect);
+            }
+        }
+
         // Установка следующего цикла, если нужно
         protected void setNextScene(Scene scene)
         {
