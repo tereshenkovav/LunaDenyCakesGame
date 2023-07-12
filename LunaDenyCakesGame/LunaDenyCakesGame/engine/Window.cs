@@ -38,7 +38,7 @@ namespace SfmlNetEngine
 
             // Начальный цикл игры - главное меню
             
-            if (tekscene==null) tekscene = (Scene)Activator.CreateInstance(optscene);             
+            if (tekscene==null) tekscene = (Scene)Activator.CreateInstance(initscene);
             tekscene.Init();
 
             while (window.IsOpen)

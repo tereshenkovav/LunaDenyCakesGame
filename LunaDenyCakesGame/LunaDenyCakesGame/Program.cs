@@ -22,7 +22,7 @@ namespace LunaDenyCakesGame
             ObjModule.texts.loadFromFile("strings.ru.json");
 
             var window = new Window();
-            window.Show(typeof(SceneMenu), typeof(SceneMenu));
+            window.Show(typeof(ScenePlay), typeof(SceneMenu));
             CommonData.UnLoad();
         }
     }

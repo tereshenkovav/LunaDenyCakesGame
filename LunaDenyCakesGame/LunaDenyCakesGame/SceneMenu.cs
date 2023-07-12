@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -71,6 +70,11 @@ namespace LunaDenyCakesGame
                 {
                     if (mouseButtonEventArgs.Button == Mouse.Button.Left)
                     {
+                        if (isMousePosOverButton(0))
+                        {
+                            setNextScene(new ScenePlay());
+                            return SceneResult.Switch;
+                        }
                         if (isMousePosOverButton(2))
                         {
                             ObjModule.opt.invertSoundOn();
