@@ -65,7 +65,7 @@ namespace SfmlNetEngine
                     case SceneResult.RebuildWindow:
                         tekscene.UnInit();
                         window.Close();
-                        tekscene = (Scene)Activator.CreateInstance(initscene);
+                        tekscene = (Scene)Activator.CreateInstance(optscene);
                         goto lab_reset_fullscreen;                        
                     default:
                         // Иначе просто выводим игру на экран

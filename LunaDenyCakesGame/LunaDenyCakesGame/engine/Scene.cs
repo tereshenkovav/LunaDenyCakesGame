@@ -19,6 +19,8 @@ namespace SfmlNetEngine
     public abstract class Scene
     {
         private Vector2i mousepos;
+        private static Vector2f left_scale = new Vector2f(1, 1);
+        private static Vector2f right_scale = new Vector2f(-1, 1);
 
         // Ссылка на объект игрового цикла, куда перейдет управление
         protected Scene nextscene = null;
@@ -67,6 +69,20 @@ namespace SfmlNetEngine
         public void DrawAt(RenderWindow window, Sprite spr, Vector2f pos)
         {
             spr.Position = pos;
+            window.Draw(spr);
+        }
+
+        public void DrawMirrHorzAt(RenderWindow window, Sprite spr, float x, float y, bool ismirr)
+        {
+            spr.Position = new Vector2f(x, y);
+            spr.Scale = ismirr ? right_scale : left_scale;
+            window.Draw(spr);
+        }
+
+        public void DrawMirrHorzAt(RenderWindow window, Sprite spr, Vector2f pos, bool ismirr)
+        {
+            spr.Position = pos;
+            spr.Scale = ismirr ? right_scale : left_scale;
             window.Draw(spr);
         }
 

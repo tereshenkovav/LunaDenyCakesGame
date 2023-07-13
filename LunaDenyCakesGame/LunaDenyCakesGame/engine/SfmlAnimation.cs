@@ -20,6 +20,7 @@ namespace SfmlNetEngine
         private float tekt;
         private PlayState playstate;
 
+        // Добавить опции спрайтов обычные
         public SfmlAnimation(String filename, int FrameCount, float FPS): base()
         {
             this.FrameCount = FrameCount;
