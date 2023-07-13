@@ -21,6 +21,8 @@ namespace LunaDenyCakesGame
     {
         private List<Zone> zones;
         private static int ZONEW = 84;
+        private static int ZONEH1 = 110-24;
+        private static int ZONEH = 110;
         private float celestiax;
         private int celestiazoneidx;
         private float lunax;
@@ -32,12 +34,12 @@ namespace LunaDenyCakesGame
         {
             zones = new List<Zone>();
             zones.Add(new Zone() { y = 90, left = 50, right = 50 + ZONEW * 11 });
-            zones.Add(new Zone() { y = 200, left = 50, right = 50 + ZONEW * 11 });
-            zones.Add(new Zone() { y = 310, left = 50, right = 50 + ZONEW * 11 });
-            zones.Add(new Zone() { y = 420, left = 50, right = 50 + ZONEW * 11 });
-            zones.Add(new Zone() { y = 530, left = 50, right = 50 + ZONEW * 11 });
-            zones.Add(new Zone() { y = 640, left = 50, right = 50 + ZONEW * 11 });
-            zones.Add(new Zone() { y = 750, left = 50, right = 50 + ZONEW * 11 });
+            zones.Add(new Zone() { y = 90 + 1 * ZONEH, left = 50, right = 50 + ZONEW * 11 });
+            zones.Add(new Zone() { y = 90 + 2 * ZONEH, left = 50, right = 50 + ZONEW * 11 });
+            zones.Add(new Zone() { y = 90 + 3 * ZONEH, left = 50, right = 50 + ZONEW * 11 });
+            zones.Add(new Zone() { y = 90 + 4 * ZONEH, left = 50, right = 50 + ZONEW * 11 });
+            zones.Add(new Zone() { y = 90 + 5 * ZONEH, left = 50, right = 50 + ZONEW * 11 });
+            zones.Add(new Zone() { y = 90 + 6 * ZONEH, left = 50, right = 50 + ZONEW * 11 });
 
             celestiax = (zones[0].left+ zones[0].right)/ 2;
             celestiazoneidx = 0;
@@ -85,9 +87,27 @@ namespace LunaDenyCakesGame
             else
                 return false;
         }
+        public int getZoneByXY(Vector2i mxy)
+        {
+            for (int i = 0; i < zones.Count; i++)
+            {
+                if ((zones[i].left < mxy.X) && (mxy.X < zones[i].right) && (zones[i].y > mxy.Y) && (mxy.Y > zones[i].y - ZONEH1)) return i;
+            }
+            return -1;
+        }
+        public bool jumpLunaToXY(Vector2i mxy)
+        {
+            int idx = getZoneByXY(mxy);
+            if (idx == -1) return false;
+            lunazoneidx = idx;
+            lunax = mxy.X;
+            if (lunax < zones[idx].left + PONYW / 2) lunax = zones[idx].left + PONYW / 2;
+            if (lunax > zones[idx].right - PONYW / 2) lunax = zones[idx].right - PONYW / 2;
+            return true;
+        }
         public void Update(float dt)
         {
 
-        }
+        }        
     }
 }

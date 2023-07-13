@@ -23,6 +23,7 @@ namespace LunaDenyCakesGame
         private Sprite action_laser;
         private Sprite action_chicken;
         private Sprite action_jump;
+        private Sprite deny;
         private Color[] colorset;
         private Game game;
         private bool islunawalk;
@@ -39,9 +40,10 @@ namespace LunaDenyCakesGame
             cakes[0] = SfmlHelper.LoadSprite("images/cake1.png",SpriteLoaderOptions.sloCentered);
             cakes[1] = SfmlHelper.LoadSprite("images/cake2.png", SpriteLoaderOptions.sloCentered);
             cakes[2] = SfmlHelper.LoadSprite("images/cake3.png", SpriteLoaderOptions.sloCentered);
-            action_laser = SfmlHelper.LoadSprite("images/action_laser.png", SpriteLoaderOptions.sloCentered);
-            action_chicken = SfmlHelper.LoadSprite("images/action_chicken.png", SpriteLoaderOptions.sloCentered);
-            action_jump = SfmlHelper.LoadSprite("images/action_jump.png", SpriteLoaderOptions.sloCentered);
+            action_laser = SfmlHelper.LoadSprite("images/action_laser.png");
+            action_chicken = SfmlHelper.LoadSprite("images/action_chicken.png");
+            action_jump = SfmlHelper.LoadSprite("images/action_jump.png");
+            deny = SfmlHelper.LoadSprite("images/deny.png");
             celestia_walk = new SfmlAnimation("images/celestia_walk.png", 6, 6);
             celestia_walk.Origin = new Vector2f(celestia_walk.Texture.Size.X / 2, 0);
             celestia_walk.Play();
@@ -84,10 +86,9 @@ namespace LunaDenyCakesGame
                 if (args is MouseButtonEventArgs mouseButtonEventArgs)
                 {
                     if (mouseButtonEventArgs.Button == Mouse.Button.Left)
-                    {
-                        
-                    }
-                                
+                    {                        
+                        game.jumpLunaToXY(getMousePosition());
+                    }                                
                 }
             }
 
@@ -137,6 +138,8 @@ namespace LunaDenyCakesGame
                     game.getLunaPos().X, game.getLunaPos().Y - 126,ismirr);
 
             // Курсор
+            int idx = game.getZoneByXY(getMousePosition());
+            if (idx==-1) DrawAt(window, deny, (Vector2f)getMousePosition());
             DrawAt(window, action_jump, (Vector2f)getMousePosition());
         }
     }
