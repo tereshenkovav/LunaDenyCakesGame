@@ -17,9 +17,16 @@ namespace LunaDenyCakesGame
 
     public enum Walking {  No, Left, Right };
 
+    public class Chicken
+    {
+        public int zoneidx;
+        public float x;
+    }
+
     public class Game
     {
         private List<Zone> zones;
+        private List<Chicken> chickens;
         private static int ZONEW = 84;
         private static int ZONEH1 = 110-24;
         private static int ZONEH = 110;
@@ -40,6 +47,8 @@ namespace LunaDenyCakesGame
             zones.Add(new Zone() { y = 90 + 4 * ZONEH, left = 50, right = 50 + ZONEW * 11 });
             zones.Add(new Zone() { y = 90 + 5 * ZONEH, left = 50, right = 50 + ZONEW * 11 });
             zones.Add(new Zone() { y = 90 + 6 * ZONEH, left = 50, right = 50 + ZONEW * 11 });
+
+            chickens = new List<Chicken>();
 
             celestiax = (zones[0].left+ zones[0].right)/ 2;
             celestiazoneidx = 0;
@@ -65,6 +74,14 @@ namespace LunaDenyCakesGame
         public Zone getZone(int i)
         {
             return zones[i];
+        }
+        public int getChickenCount()
+        {
+            return chickens.Count;
+        }
+        public Vector2f getChickenPos(int i)
+        {
+            return new Vector2f(chickens[i].x, zones[chickens[i].zoneidx].y);
         }
         public bool sendLunaLeft(float dt)
         {
@@ -105,6 +122,20 @@ namespace LunaDenyCakesGame
             if (lunax > zones[idx].right - PONYW / 2) lunax = zones[idx].right - PONYW / 2;
             return true;
         }
+        public bool addChicken(Vector2i mxy)
+        {
+            int idx = getZoneByXY(mxy);
+            if (idx == -1) return false;
+  
+            float chickenx = mxy.X;
+            if (chickenx < zones[idx].left + PONYW / 2) chickenx = zones[idx].left + PONYW / 2;
+            if (chickenx > zones[idx].right - PONYW / 2) chickenx = zones[idx].right - PONYW / 2;
+
+            chickens.Add(new Chicken() { x = chickenx, zoneidx = idx });
+
+            return true;
+        }
+
         public void Update(float dt)
         {
 

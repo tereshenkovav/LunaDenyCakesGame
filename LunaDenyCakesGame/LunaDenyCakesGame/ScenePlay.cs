@@ -20,14 +20,15 @@ namespace LunaDenyCakesGame
         private SfmlAnimation luna_walk;
         private SfmlAnimation luna_wait;
         private Sound galop;
-        private Sprite action_laser;
-        private Sprite action_chicken;
-        private Sprite action_jump;
+        private Sprite action_laser;        
         private Sprite deny;
         private Color[] colorset;
         private Game game;
         private bool islunawalk;
         private bool ismirr;
+        private List<GameAction> actions;
+        private Dictionary<string,Sprite> actionsprites;
+        private int tekaction;
         
         public override void Init()
         {
@@ -40,9 +41,7 @@ namespace LunaDenyCakesGame
             cakes[0] = SfmlHelper.LoadSprite("images/cake1.png",SpriteLoaderOptions.sloCentered);
             cakes[1] = SfmlHelper.LoadSprite("images/cake2.png", SpriteLoaderOptions.sloCentered);
             cakes[2] = SfmlHelper.LoadSprite("images/cake3.png", SpriteLoaderOptions.sloCentered);
-            action_laser = SfmlHelper.LoadSprite("images/action_laser.png");
-            action_chicken = SfmlHelper.LoadSprite("images/action_chicken.png");
-            action_jump = SfmlHelper.LoadSprite("images/action_jump.png");
+            action_laser = SfmlHelper.LoadSprite("images/action_laser.png");            
             deny = SfmlHelper.LoadSprite("images/deny.png");
             celestia_walk = new SfmlAnimation("images/celestia_walk.png", 6, 6);
             celestia_walk.Origin = new Vector2f(celestia_walk.Texture.Size.X / 2, 0);
@@ -58,8 +57,17 @@ namespace LunaDenyCakesGame
             luna_wait.Play();
 
             colorset = new Color[] { new Color(255, 0, 0), new Color(255, 128, 0), new Color(255, 255, 0), new Color(0, 255, 0) };
-
+                        
             game = new Game();
+
+            actions = new List<GameAction>();
+            actions.Add(new GAJump(game));
+            actions.Add(new GAChicken(game));
+            actionsprites = new Dictionary<string, Sprite>();
+            actionsprites.Add(actions[0].getCode(),SfmlHelper.LoadSprite("images/action_jump.png"));
+            actionsprites.Add(actions[1].getCode(),SfmlHelper.LoadSprite("images/action_chicken.png"));
+            tekaction = 0;
+
             islunawalk = false;
             ismirr = false;
         }
@@ -86,9 +94,9 @@ namespace LunaDenyCakesGame
                 if (args is MouseButtonEventArgs mouseButtonEventArgs)
                 {
                     if (mouseButtonEventArgs.Button == Mouse.Button.Left)
-                    {                        
-                        game.jumpLunaToXY(getMousePosition());
-                    }                                
+                        actions[tekaction].Apply(getMousePosition());
+                    if (mouseButtonEventArgs.Button == Mouse.Button.Right) 
+                        tekaction = (tekaction + 1) % actions.Count;
                 }
             }
 
@@ -129,7 +137,8 @@ namespace LunaDenyCakesGame
             float v = 0.33f;
             DrawIndicator(window, 100 + 4 * 84 - 24, 300 - 24 + 24, 48, 8, v, colorset);
 
-            DrawAt(window, chicken, 100 + 2 * 84, 300 + 220 - 30);
+            for (int i = 0; i < game.getChickenCount(); i++)
+                DrawAt(window, chicken, game.getChickenPos(i).X,game.getChickenPos(i).Y - 30);
                         
             DrawMirrHorzAt(window, game.isCelestiaEat()?celestia_eat:celestia_walk, 
                     game.getCelestiaPos().X,game.getCelestiaPos().Y-128,false);
@@ -138,9 +147,9 @@ namespace LunaDenyCakesGame
                     game.getLunaPos().X, game.getLunaPos().Y - 126,ismirr);
 
             // Курсор
-            int idx = game.getZoneByXY(getMousePosition());
-            if (idx==-1) DrawAt(window, deny, (Vector2f)getMousePosition());
-            DrawAt(window, action_jump, (Vector2f)getMousePosition());
+            if (!actions[tekaction].isAllowed(getMousePosition()))
+                DrawAt(window, deny, (Vector2f)getMousePosition());
+            DrawAt(window, actionsprites[actions[tekaction].getCode()], (Vector2f)getMousePosition());
         }
     }
 }
