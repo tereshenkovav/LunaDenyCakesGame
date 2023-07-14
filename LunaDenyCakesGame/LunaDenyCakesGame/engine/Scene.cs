@@ -94,7 +94,7 @@ namespace SfmlNetEngine
             window.Draw(text);
         }
 
-        public void DrawIndicator(RenderWindow window, int x, int y, int w, int h, float v, Color[] colorset)
+        public void DrawIndicator(RenderWindow window, float x, float y, int w, int h, float v, Color[] colorset)
         {
             if (v < 0.0f) v = 0.0f;
             if (v > 1.0f) v = 1.0f;

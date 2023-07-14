@@ -28,7 +28,8 @@ namespace LunaDenyCakesGame
         private List<GameAction> actions;
         private Dictionary<string,Sprite> actionsprites;
         private int tekaction;
-        
+        private const int INDICATOR_W = 48;
+
         public override void Init()
         {
             text = new Text("", CommonData.font, 28);
@@ -121,6 +122,8 @@ namespace LunaDenyCakesGame
             luna_wait.Update(dt);
             laser.Update(dt);
 
+            game.Update(dt);
+
             return SceneResult.Normal;
         }
 
@@ -135,12 +138,12 @@ namespace LunaDenyCakesGame
                     DrawAt(window, block, game.getZone(i).left+j*84, game.getZone(i).y);
             }
 
-            DrawAt(window, cakes[0], 100 + 4 * 84, 300 - 24);
-            DrawAt(window, cakes[1], 100 + 3 * 84, 300 + 110 - 24);
-            DrawAt(window, cakes[2], 100 + 7 * 84, 300 + 220 - 24);
-
-            float v = 0.33f;
-            DrawIndicator(window, 100 + 4 * 84 - 24, 300 - 24 + 24, 48, 8, v, colorset);
+            for (int i = 0; i < game.getCakeCount(); i++)
+            {
+                DrawAt(window, cakes[game.getCakeSpriteIdx(i)], game.getCakePos(i).X, game.getCakePos(i).Y - 30);
+                if (game.getCakeLeft(i)<1.0f)
+                    DrawIndicator(window, game.getCakePos(i).X-INDICATOR_W/2, game.getCakePos(i).Y, INDICATOR_W, 8, game.getCakeLeft(i), colorset);
+            }
 
             for (int i = 0; i < game.getChickenCount(); i++)
                 DrawAt(window, chicken, game.getChickenPos(i).X,game.getChickenPos(i).Y - 30);

@@ -29,10 +29,19 @@ namespace LunaDenyCakesGame
         public Direction dir;
     }
 
+    public class Cake
+    {
+        public int zoneidx;
+        public float x;
+        public int spriteidx;
+        public float left;
+    }
+
     public class Game
     {
         private List<Zone> zones;
         private List<Chicken> chickens;
+        private List<Cake> cakes;
         private static int ZONEW = 84;
         private static int ZONEH1 = 110-24;
         private static int ZONEH = 110;
@@ -59,6 +68,13 @@ namespace LunaDenyCakesGame
             laser = new Laser() { ison = false };
 
             chickens = new List<Chicken>();
+            
+            cakes = new List<Cake>();
+            for (int i=0; i<zones.Count; i++)
+            {
+                cakes.Add(new Cake() { x = 200, zoneidx = i, spriteidx = (2 * i + 0) % 3, left = 1.0f });
+                cakes.Add(new Cake() { x = 800, zoneidx = i, spriteidx = (2 * i + 1) % 3, left = 1.0f });
+            }
 
             celestiax = (zones[0].left+ zones[0].right)/ 2;
             celestiazoneidx = 0;
@@ -102,8 +118,26 @@ namespace LunaDenyCakesGame
         {
             return new Vector2f(chickens[i].x, zones[chickens[i].zoneidx].y);
         }
+        public int getCakeCount()
+        {
+            return cakes.Count;
+        }
+        public Vector2f getCakePos(int i)
+        {
+            return new Vector2f(cakes[i].x, zones[cakes[i].zoneidx].y);
+        }
+        public int getCakeSpriteIdx(int i)
+        {
+            return cakes[i].spriteidx;
+        }
+        public float getCakeLeft(int i)
+        {
+            return cakes[i].left;
+        }
         public bool sendLunaLeft(float dt)
         {
+            if (laser.ison) return false;
+
             float newlunax = lunax - LUNAVX * dt;
             if (newlunax >= zones[lunazoneidx].left + PONYW / 2)
             {
@@ -115,6 +149,8 @@ namespace LunaDenyCakesGame
         }
         public bool sendLunaRight(float dt)
         {
+            if (laser.ison) return false;
+
             float newlunax = lunax + LUNAVX * dt;
             if (newlunax <= zones[lunazoneidx].right - PONYW / 2)
             {
@@ -172,7 +208,8 @@ namespace LunaDenyCakesGame
         }
         public void Update(float dt)
         {
-
+            foreach (var cake in cakes)
+                cake.left -= 0.1f*dt;
         }        
     }
 }
