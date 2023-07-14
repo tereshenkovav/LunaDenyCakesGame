@@ -56,17 +56,19 @@ namespace LunaDenyCakesGame
             
         }
         
-        public override SceneResult Frame(float dt, IEnumerable<EventArgs> events)
+        public override SceneResult Frame(float dt, IEnumerable<EventArgsEx> events)
         {
             // Обход событий, для Esc - выход из игры, для мыши - вызов действия меню
-            foreach (EventArgs args in events)
+            foreach (EventArgsEx args in events)
             {
-                if (args is KeyEventArgs keyEventArg)
+                if (args.released) continue;
+
+                if (args.e is KeyEventArgs keyEventArg)
                 {
                     if (keyEventArg.Code == Keyboard.Key.Escape) return SceneResult.Exit;
                 }
 
-                if (args is MouseButtonEventArgs mouseButtonEventArgs)
+                if (args.e is MouseButtonEventArgs mouseButtonEventArgs)
                 {
                     if (mouseButtonEventArgs.Button == Mouse.Button.Left)
                     {

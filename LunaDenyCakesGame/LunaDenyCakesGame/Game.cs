@@ -15,12 +15,18 @@ namespace LunaDenyCakesGame
         public int right;
     }
 
-    public enum Walking {  No, Left, Right };
+    public enum Direction {  No, Left, Right };
 
     public class Chicken
     {
         public int zoneidx;
         public float x;
+    }
+
+    public class Laser
+    {
+        public bool ison;
+        public Direction dir;
     }
 
     public class Game
@@ -33,10 +39,12 @@ namespace LunaDenyCakesGame
         private float celestiax;
         private int celestiazoneidx;
         private float lunax;
+        private Direction lunadir;
         private int lunazoneidx;
         private static int LUNAVX = 100;
         private static int PONYW = 30;
-
+        private Laser laser;
+                
         public Game()
         {
             zones = new List<Zone>();
@@ -48,12 +56,15 @@ namespace LunaDenyCakesGame
             zones.Add(new Zone() { y = 90 + 5 * ZONEH, left = 50, right = 50 + ZONEW * 11 });
             zones.Add(new Zone() { y = 90 + 6 * ZONEH, left = 50, right = 50 + ZONEW * 11 });
 
+            laser = new Laser() { ison = false };
+
             chickens = new List<Chicken>();
 
             celestiax = (zones[0].left+ zones[0].right)/ 2;
             celestiazoneidx = 0;
             lunax = (zones[6].left + zones[6].right) / 2;
-            lunazoneidx = 6;            
+            lunazoneidx = 6;
+            lunadir = Direction.Right;
         }
         public Vector2f getCelestiaPos()
         {
@@ -66,6 +77,14 @@ namespace LunaDenyCakesGame
         public Vector2f getLunaPos()
         {
             return new Vector2f(lunax, zones[lunazoneidx].y);
+        }
+        public Direction getLunaDir()
+        {
+            return lunadir;
+        }
+        public int getLunaZoneIdx()
+        {
+            return lunazoneidx;
         }
         public int getZoneCount()
         {
@@ -89,6 +108,7 @@ namespace LunaDenyCakesGame
             if (newlunax >= zones[lunazoneidx].left + PONYW / 2)
             {
                 lunax = newlunax;
+                lunadir = Direction.Left;
                 return true;
             }
             else return false;
@@ -99,6 +119,7 @@ namespace LunaDenyCakesGame
             if (newlunax <= zones[lunazoneidx].right - PONYW / 2)
             {
                 lunax = newlunax;
+                lunadir = Direction.Right;
                 return true;
             }
             else
@@ -135,7 +156,20 @@ namespace LunaDenyCakesGame
 
             return true;
         }
-
+        public Laser getLaser()
+        {
+            return laser;
+        }
+        public void startLaser(Vector2i mxy)
+        {
+            laser.dir = (mxy.X > lunax) ? Direction.Right : Direction.Left;
+            laser.ison = true;
+            lunadir = laser.dir;
+        }
+        public void finishLaser()
+        {
+            laser.ison = false;
+        }
         public void Update(float dt)
         {
 

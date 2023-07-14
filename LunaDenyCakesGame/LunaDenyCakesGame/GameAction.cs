@@ -19,6 +19,10 @@ namespace LunaDenyCakesGame
         public abstract string getCode();
         public abstract bool isAllowed(Vector2i mxy);
         public abstract bool Apply(Vector2i mxy);
+        public virtual void Finish()
+        {
+            // No action default
+        }
     }
 
     public class GAJump : GameAction
@@ -36,6 +40,7 @@ namespace LunaDenyCakesGame
         }
         public override bool Apply(Vector2i mxy)
         {
+            if (!isAllowed(mxy)) return false;
             return game.jumpLunaToXY(mxy);
         }
     }
@@ -55,7 +60,33 @@ namespace LunaDenyCakesGame
         }
         public override bool Apply(Vector2i mxy)
         {
+            if (!isAllowed(mxy)) return false;
             return game.addChicken(mxy);
+        }
+    }
+
+    public class GALaser : GameAction
+    {
+        public GALaser(Game game) : base(game)
+        {
+        }
+        public override string getCode()
+        {
+            return "laser";
+        }
+        public override bool isAllowed(Vector2i mxy)
+        {
+            return (game.getZoneByXY(mxy) == game.getLunaZoneIdx());
+        }
+        public override bool Apply(Vector2i mxy)
+        {
+            if (!isAllowed(mxy)) return false;
+            game.startLaser(mxy);
+            return true;
+        }
+        public override void Finish()
+        {
+            game.finishLaser();
         }
     }
 }

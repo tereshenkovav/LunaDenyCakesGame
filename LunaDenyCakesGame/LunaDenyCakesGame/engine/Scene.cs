@@ -38,7 +38,7 @@ namespace SfmlNetEngine
         }
 
         // Процедура фрейма - обработка событий и сдвига времени, возвращает указание, что делать далее
-        public virtual SceneResult Frame(float dt, IEnumerable<EventArgs> events)
+        public virtual SceneResult Frame(float dt, IEnumerable<EventArgsEx> events)
         {
             return SceneResult.Normal;
         }

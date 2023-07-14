@@ -7,10 +7,20 @@ using SFML.System;
 
 namespace SfmlNetEngine
 {
+    public class EventArgsEx
+    {
+        public EventArgs e;
+        public bool released;
+        public EventArgsEx(EventArgs e, bool released)
+        {
+            this.e = e;
+            this.released = released;
+        }
+    }
     // Класс окна игры
     public class Window
     {
-        private List<EventArgs> events = new List<EventArgs>();
+        private List<EventArgsEx> events = new List<EventArgsEx>();
         
         public void Show(Type initscene, Type optscene)
         {            
@@ -31,9 +41,11 @@ namespace SfmlNetEngine
                             
             // Привязка событий
             window.Closed += (obj, e) => { window.Close(); };
-            window.KeyPressed += (sender, e) => { events.Add(e); };
-            window.MouseButtonPressed += (sender, e) => { events.Add(e); };
-                                    
+            window.KeyPressed += (sender, e) => { events.Add(new EventArgsEx(e,false)); };
+            window.KeyReleased += (sender, e) => { events.Add(new EventArgsEx(e, true)); };
+            window.MouseButtonPressed += (sender, e) => { events.Add(new EventArgsEx(e, false)); };
+            window.MouseButtonReleased += (sender, e) => { events.Add(new EventArgsEx(e, true)); };
+
             Clock clock = new Clock();
 
             // Начальный цикл игры - главное меню
