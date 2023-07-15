@@ -40,6 +40,30 @@ namespace SfmlNetEngine
             setFrame(0);
         }
 
+        public SfmlAnimation(String filename, int framew, int frameh, int FrameCount, float FPS) : base()
+        {
+            this.FrameCount = FrameCount;
+            sec_per_frame = 1.0f / FPS;
+            playstate = PlayState.Stopped;
+            frames = new Texture[FrameCount];
+
+            var img = new Image(filename);
+
+            IntRect area = new IntRect(0, 0, framew, frameh);
+            for (int i = 0; i < FrameCount; i++)
+            {
+                frames[i] = new Texture(img, area);
+                area.Left += framew;
+                if (area.Left >= (int)img.Size.X)
+                {
+                    area.Left = 0;
+                    area.Top += frameh;
+                }
+            }
+            tekt = 0;
+            setFrame(0);
+        }
+
         public void Update(float dt)
         {
             if (!isPlayed()) return;

@@ -20,6 +20,7 @@ namespace LunaDenyCakesGame
         private SfmlAnimation luna_walk;
         private SfmlAnimation luna_wait;
         private SfmlAnimation laser;
+        private SfmlAnimation shield;
         private Sound galop;        
         private Sprite deny;
         private Color[] colorset;
@@ -41,7 +42,7 @@ namespace LunaDenyCakesGame
             cakes[0] = SfmlHelper.LoadSprite("images/cake1.png",SpriteLoaderOptions.sloCentered);
             cakes[1] = SfmlHelper.LoadSprite("images/cake2.png", SpriteLoaderOptions.sloCentered);
             cakes[2] = SfmlHelper.LoadSprite("images/cake3.png", SpriteLoaderOptions.sloCentered);            
-            deny = SfmlHelper.LoadSprite("images/deny.png");
+            deny = SfmlHelper.LoadSprite("images/deny.png", SpriteLoaderOptions.sloCentered);
             celestia_walk = new SfmlAnimation("images/celestia_walk.png", 6, 6);
             celestia_walk.Origin = new Vector2f(celestia_walk.Texture.Size.X / 2, 0);
             celestia_walk.Play();
@@ -54,10 +55,13 @@ namespace LunaDenyCakesGame
             luna_wait = new SfmlAnimation("images/luna_wait.png", 6, 6);
             luna_wait.Origin = new Vector2f(luna_wait.Texture.Size.X / 2, 0);
             luna_wait.Play();
-            laser = new SfmlAnimation("images/laser.png", 8, 16);
-            laser.Play();
             luna_wait.Origin = new Vector2f(luna_wait.Texture.Size.X / 2, 0);
             luna_wait.Play();
+            laser = new SfmlAnimation("images/laser.png", 8, 16);
+            laser.Play();
+            shield = new SfmlAnimation("images/shield.png", 80, 80, 28, 14);
+            shield.Origin = new Vector2f(shield.Texture.Size.X / 2, shield.Texture.Size.Y / 2);
+            shield.Play();
 
             colorset = new Color[] { new Color(255, 0, 0), new Color(255, 128, 0), new Color(255, 255, 0), new Color(0, 255, 0) };
                         
@@ -67,10 +71,12 @@ namespace LunaDenyCakesGame
             actions.Add(new GAJump(game));
             actions.Add(new GAChicken(game));
             actions.Add(new GALaser(game));
+            actions.Add(new GAShield(game));
             actionsprites = new Dictionary<string, Sprite>();
-            actionsprites.Add(actions[0].getCode(),SfmlHelper.LoadSprite("images/action_jump.png"));
-            actionsprites.Add(actions[1].getCode(),SfmlHelper.LoadSprite("images/action_chicken.png"));
-            actionsprites.Add(actions[2].getCode(), SfmlHelper.LoadSprite("images/action_laser.png"));
+            actionsprites.Add(actions[0].getCode(), SfmlHelper.LoadSprite("images/action_jump.png", SpriteLoaderOptions.sloCentered));
+            actionsprites.Add(actions[1].getCode(), SfmlHelper.LoadSprite("images/action_chicken.png", SpriteLoaderOptions.sloCentered));
+            actionsprites.Add(actions[2].getCode(), SfmlHelper.LoadSprite("images/action_laser.png", SpriteLoaderOptions.sloCentered));
+            actionsprites.Add(actions[3].getCode(), SfmlHelper.LoadSprite("images/action_shield.png", SpriteLoaderOptions.sloCentered));
             tekaction = 0;
 
             islunawalk = false;            
@@ -121,6 +127,7 @@ namespace LunaDenyCakesGame
             luna_walk.Update(dt);
             luna_wait.Update(dt);
             laser.Update(dt);
+            shield.Update(dt);
 
             game.Update(dt);
 
@@ -140,9 +147,11 @@ namespace LunaDenyCakesGame
 
             for (int i = 0; i < game.getCakeCount(); i++)
             {
-                DrawAt(window, cakes[game.getCakeSpriteIdx(i)], game.getCakePos(i).X, game.getCakePos(i).Y - 30);
-                if (game.getCakeLeft(i)<1.0f)
-                    DrawIndicator(window, game.getCakePos(i).X-INDICATOR_W/2, game.getCakePos(i).Y, INDICATOR_W, 8, game.getCakeLeft(i), colorset);
+                DrawAt(window, cakes[game.getCakeSpriteIdx(i)], game.getCakePos(i).X, game.getCakePos(i).Y-30);
+                if (game.isCakeShieldOn(i))
+                    DrawAt(window, shield, game.getCakePos(i).X, game.getCakePos(i).Y - 30);
+                if (game.getCakeHP(i)<1.0f)
+                    DrawIndicator(window, game.getCakePos(i).X - INDICATOR_W / 2, game.getCakePos(i).Y, INDICATOR_W, 8, game.getCakeHP(i), colorset);
             }
 
             for (int i = 0; i < game.getChickenCount(); i++)

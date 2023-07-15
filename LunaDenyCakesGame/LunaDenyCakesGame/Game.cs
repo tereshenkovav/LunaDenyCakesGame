@@ -34,7 +34,8 @@ namespace LunaDenyCakesGame
         public int zoneidx;
         public float x;
         public int spriteidx;
-        public float left;
+        public float hp;
+        public float shieldleft;
     }
 
     public class Game
@@ -45,6 +46,7 @@ namespace LunaDenyCakesGame
         private static int ZONEW = 84;
         private static int ZONEH1 = 110-24;
         private static int ZONEH = 110;
+        private static int CAKEW = 48;
         private float celestiax;
         private int celestiazoneidx;
         private float lunax;
@@ -52,6 +54,8 @@ namespace LunaDenyCakesGame
         private int lunazoneidx;
         private static int LUNAVX = 100;
         private static int PONYW = 30;
+        private static int SHIELDTIME = 10;
+
         private Laser laser;
                 
         public Game()
@@ -72,8 +76,8 @@ namespace LunaDenyCakesGame
             cakes = new List<Cake>();
             for (int i=0; i<zones.Count; i++)
             {
-                cakes.Add(new Cake() { x = 200, zoneidx = i, spriteidx = (2 * i + 0) % 3, left = 1.0f });
-                cakes.Add(new Cake() { x = 800, zoneidx = i, spriteidx = (2 * i + 1) % 3, left = 1.0f });
+                cakes.Add(new Cake() { x = 200, zoneidx = i, spriteidx = (2 * i + 0) % 3, hp = 1.0f, shieldleft = 0.0f });
+                cakes.Add(new Cake() { x = 800, zoneidx = i, spriteidx = (2 * i + 1) % 3, hp = 1.0f, shieldleft = 0.0f });
             }
 
             celestiax = (zones[0].left+ zones[0].right)/ 2;
@@ -130,9 +134,13 @@ namespace LunaDenyCakesGame
         {
             return cakes[i].spriteidx;
         }
-        public float getCakeLeft(int i)
+        public float getCakeHP(int i)
         {
-            return cakes[i].left;
+            return cakes[i].hp;
+        }
+        public bool isCakeShieldOn(int i)
+        {
+            return cakes[i].shieldleft>0.0f;
         }
         public bool sendLunaLeft(float dt)
         {
@@ -166,6 +174,16 @@ namespace LunaDenyCakesGame
             for (int i = 0; i < zones.Count; i++)
             {
                 if ((zones[i].left < mxy.X) && (mxy.X < zones[i].right) && (zones[i].y > mxy.Y) && (mxy.Y > zones[i].y - ZONEH1)) return i;
+            }
+            return -1;
+        }
+        public int getCakeAt(Vector2i mxy)
+        {
+            for (int i = 0; i < cakes.Count; i++)
+            {
+                if ((cakes[i].x - CAKEW / 2 < mxy.X) && (cakes[i].x + CAKEW / 2 > mxy.X) &&
+                    (zones[cakes[i].zoneidx].y - CAKEW / 2 - 30 < mxy.Y) && (zones[cakes[i].zoneidx].y + CAKEW / 2 - 30 > mxy.Y))
+                    return i;
             }
             return -1;
         }
@@ -206,10 +224,17 @@ namespace LunaDenyCakesGame
         {
             laser.ison = false;
         }
+        public bool setShieldToCakeByXY(Vector2i mxy)
+        {
+            int idx = getCakeAt(mxy);
+            if (idx == -1) return false;
+            cakes[idx].shieldleft = SHIELDTIME;
+            return true;
+        }
         public void Update(float dt)
         {
             foreach (var cake in cakes)
-                cake.left -= 0.1f*dt;
+                if (cake.shieldleft>0) cake.shieldleft -= dt;
         }        
     }
 }

@@ -65,6 +65,26 @@ namespace LunaDenyCakesGame
         }
     }
 
+    public class GAShield : GameAction
+    {
+        public GAShield(Game game) : base(game)
+        {
+        }
+        public override string getCode()
+        {
+            return "shield";
+        }
+        public override bool isAllowed(Vector2i mxy)
+        {
+            return (game.getCakeAt(mxy)!=-1);
+        }
+        public override bool Apply(Vector2i mxy)
+        {
+            if (!isAllowed(mxy)) return false;
+            return game.setShieldToCakeByXY(mxy);
+        }
+    }
+
     public class GALaser : GameAction
     {
         public GALaser(Game game) : base(game)
