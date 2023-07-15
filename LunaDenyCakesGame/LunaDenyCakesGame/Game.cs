@@ -21,6 +21,7 @@ namespace LunaDenyCakesGame
     {
         public int zoneidx;
         public float x;
+        public float vx;
     }
 
     public class Laser
@@ -38,10 +39,12 @@ namespace LunaDenyCakesGame
         public float shieldleft;
     }
 
+    public delegate void CreateFallenChicken(float x, float y, float vx, float vy);
+
     public class Game
     {
         private List<Zone> zones;
-        private List<Chicken> chickens;
+        private List<Chicken> chickens;        
         private List<Cake> cakes;
         private static int ZONEW = 84;
         private static int ZONEH1 = 110-24;
@@ -55,6 +58,9 @@ namespace LunaDenyCakesGame
         private static int LUNAVX = 100;
         private static int PONYW = 30;
         private static int SHIELDTIME = 10;
+        private static int CHICKENV = 50;
+        // Заменить на наблюдателя или глобальный объект создания эффектов
+        public CreateFallenChicken procFallenChicken = null;
 
         private Laser laser;
                 
@@ -121,6 +127,10 @@ namespace LunaDenyCakesGame
         public Vector2f getChickenPos(int i)
         {
             return new Vector2f(chickens[i].x, zones[chickens[i].zoneidx].y);
+        }
+        public Direction getChickenDir(int i)
+        {
+            return (chickens[i].vx<0?Direction.Left:Direction.Right);
         }
         public int getCakeCount()
         {
@@ -206,7 +216,13 @@ namespace LunaDenyCakesGame
             if (chickenx < zones[idx].left + PONYW / 2) chickenx = zones[idx].left + PONYW / 2;
             if (chickenx > zones[idx].right - PONYW / 2) chickenx = zones[idx].right - PONYW / 2;
 
-            chickens.Add(new Chicken() { x = chickenx, zoneidx = idx });
+            float vsig ;
+            if (celestiazoneidx == idx)
+                vsig = Math.Sign(celestiax - chickenx);
+            else
+                if (ObjModule.rnd.Next(2) == 1) vsig = 1; else vsig = -1;
+
+            chickens.Add(new Chicken() { x = chickenx, zoneidx = idx, vx = CHICKENV*vsig });
 
             return true;
         }
@@ -235,6 +251,21 @@ namespace LunaDenyCakesGame
         {
             foreach (var cake in cakes)
                 if (cake.shieldleft>0) cake.shieldleft -= dt;
+            foreach (var chicken in chickens)
+                chicken.x += chicken.vx * dt;
+
+            int i = 0;
+            while (i<chickens.Count)
+            {
+                if (((chickens[i].vx < 0) && (chickens[i].x < zones[chickens[i].zoneidx].left)) ||
+                     ((chickens[i].vx > 0) && (chickens[i].x > zones[chickens[i].zoneidx].right)))
+                {
+                    if (procFallenChicken != null) procFallenChicken(chickens[i].x, zones[chickens[i].zoneidx].y, chickens[i].vx, 200);
+                    chickens.RemoveAt(i);
+                }
+                else
+                    i++;
+            }
         }        
     }
 }

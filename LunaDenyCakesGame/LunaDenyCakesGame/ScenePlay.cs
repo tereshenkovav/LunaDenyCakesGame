@@ -10,10 +10,20 @@ namespace LunaDenyCakesGame
 {
     public class ScenePlay : Scene
     {
+        // Переделать на систему эффектов в движок
+        private class Effect
+        {
+            public float x;
+            public float y;
+            public float vx;
+            public float vy;
+            public float angle;
+        }
         // Ресурсы и константы
         private Text text;
         private Sprite block;
         private Sprite chicken;
+        private Sprite chickenfallen;
         private Sprite[] cakes;
         private SfmlAnimation celestia_walk;
         private SfmlAnimation celestia_eat;
@@ -34,12 +44,14 @@ namespace LunaDenyCakesGame
         private Dictionary<string,Sprite> actionsprites;
         private int tekaction;
         private const int INDICATOR_W = 48;
+        private List<Effect> effects;
 
         public override void Init()
         {
             text = new Text("", CommonData.font, 28);
             block = SfmlHelper.LoadSprite("images/block.png");
             chicken = SfmlHelper.LoadSprite("images/chicken.png", SpriteLoaderOptions.sloCentered);
+            chickenfallen = SfmlHelper.LoadSprite("images/chicken.png", SpriteLoaderOptions.sloCentered);
             snd_galop = SfmlHelper.LoadSound("sounds/galop.ogg");
             snd_galop.Loop = true;
             snd_laser = SfmlHelper.LoadSound("sounds/laser.ogg");
@@ -74,8 +86,9 @@ namespace LunaDenyCakesGame
             shield.Play();
 
             colorset = new Color[] { new Color(255, 0, 0), new Color(255, 128, 0), new Color(255, 255, 0), new Color(0, 255, 0) };
-                        
+
             game = new Game();
+            game.procFallenChicken = procFallenChicken;
 
             actions = new List<GameAction>();
             actions.Add(new GAJump(game));
@@ -88,6 +101,8 @@ namespace LunaDenyCakesGame
             actionsprites.Add(actions[2].getCode(), SfmlHelper.LoadSprite("images/action_laser.png", SpriteLoaderOptions.sloCentered));
             actionsprites.Add(actions[3].getCode(), SfmlHelper.LoadSprite("images/action_shield.png", SpriteLoaderOptions.sloCentered));
             tekaction = 0;
+
+            effects = new List<Effect>();
 
             islunawalk = false;
             islaseron = false;
@@ -157,6 +172,20 @@ namespace LunaDenyCakesGame
 
             game.Update(dt);
 
+            foreach(var effect in effects)
+            {
+                effect.x += effect.vx * dt;
+                effect.y += effect.vy * dt;
+                effect.angle += 2*effect.vx * dt;
+            }
+
+            int k = 0;
+            while (k < effects.Count)
+                if (effects[k].y > ObjModule.opt.getWindowHeigth() + 100)
+                    effects.RemoveAt(k);
+                else
+                    k++;
+
             return SceneResult.Normal;
         }
 
@@ -181,7 +210,7 @@ namespace LunaDenyCakesGame
             }
 
             for (int i = 0; i < game.getChickenCount(); i++)
-                DrawAt(window, chicken, game.getChickenPos(i).X,game.getChickenPos(i).Y - 30);
+                DrawMirrHorzAt(window, chicken, game.getChickenPos(i).X,game.getChickenPos(i).Y - 30, game.getChickenDir(i)==Direction.Left);
                         
             DrawMirrHorzAt(window, game.isCelestiaEat()?celestia_eat:celestia_walk, 
                     game.getCelestiaPos().X,game.getCelestiaPos().Y-128,false);
@@ -211,10 +240,21 @@ namespace LunaDenyCakesGame
                 }
             }
 
+            foreach (var effect in effects)
+            {
+                chickenfallen.Rotation = effect.angle;
+                DrawMirrHorzAt(window, chickenfallen, effect.x, effect.y - 30,effect.vx<0);
+            }
+
             // Курсор
             if (!actions[tekaction].isAllowed(getMousePosition()))
                 DrawAt(window, deny, (Vector2f)getMousePosition());
             DrawAt(window, actionsprites[actions[tekaction].getCode()], (Vector2f)getMousePosition());
+        }
+
+        private void procFallenChicken(float x, float y, float vx, float vy)
+        {
+            effects.Add(new Effect() { x = x, y = y, vx = vx, vy = vy, angle = 0.0f });
         }
     }
 }
