@@ -21,11 +21,15 @@ namespace LunaDenyCakesGame
         private SfmlAnimation luna_wait;
         private SfmlAnimation laser;
         private SfmlAnimation shield;
-        private Sound galop;        
+        private Sound snd_galop;
+        private Sound snd_laser;
+        private Sound snd_teleport;
+        private Sound snd_chicken;
         private Sprite deny;
         private Color[] colorset;
         private Game game;
-        private bool islunawalk;        
+        private bool islunawalk;
+        private bool islaseron;
         private List<GameAction> actions;
         private Dictionary<string,Sprite> actionsprites;
         private int tekaction;
@@ -36,8 +40,14 @@ namespace LunaDenyCakesGame
             text = new Text("", CommonData.font, 28);
             block = SfmlHelper.LoadSprite("images/block.png");
             chicken = SfmlHelper.LoadSprite("images/chicken.png", SpriteLoaderOptions.sloCentered);
-            galop = SfmlHelper.LoadSound("sounds/galop.ogg");
-            galop.Loop = true;
+            snd_galop = SfmlHelper.LoadSound("sounds/galop.ogg");
+            snd_galop.Loop = true;
+            snd_laser = SfmlHelper.LoadSound("sounds/laser.ogg");
+            snd_laser.Loop = true;
+            snd_teleport = SfmlHelper.LoadSound("sounds/teleport.ogg");
+            snd_teleport.Loop = false;
+            snd_chicken = SfmlHelper.LoadSound("sounds/chicken.ogg");
+            snd_chicken.Loop = false;
             cakes = new Sprite[3];
             cakes[0] = SfmlHelper.LoadSprite("images/cake1.png",SpriteLoaderOptions.sloCentered);
             cakes[1] = SfmlHelper.LoadSprite("images/cake2.png", SpriteLoaderOptions.sloCentered);
@@ -79,12 +89,16 @@ namespace LunaDenyCakesGame
             actionsprites.Add(actions[3].getCode(), SfmlHelper.LoadSprite("images/action_shield.png", SpriteLoaderOptions.sloCentered));
             tekaction = 0;
 
-            islunawalk = false;            
+            islunawalk = false;
+            islaseron = false;
         }
 
         public override void UnInit()
         {
-            galop.Stop();   
+            snd_galop.Stop();
+            snd_laser.Stop();
+            snd_teleport.Stop();
+            snd_chicken.Stop();
         }
         
         public override SceneResult Frame(float dt, IEnumerable<EventArgsEx> events)
@@ -109,21 +123,31 @@ namespace LunaDenyCakesGame
                         if (args.released)
                             actions[tekaction].Finish();
                         else
+                        {
                             actions[tekaction].Apply(getMousePosition());
+                            // Тоже переделать на наблюдателя или коды эффектов
+                            if (actions[tekaction] is GAJump) snd_teleport.Play();
+                            if (actions[tekaction] is GAChicken) snd_chicken.Play();
+                        }
                     if ((mouseButtonEventArgs.Button == Mouse.Button.Right) && (!args.released))
                         tekaction = (tekaction + 1) % actions.Count;                    
                 }
             }
-
-            islunawalk = false;
+            
+            // Переделать на паттерн наблюдатель для звуковых эффектов
+            bool newlunawalk = false;
             if (Keyboard.IsKeyPressed(Keyboard.Key.Left)|| Keyboard.IsKeyPressed(Keyboard.Key.A))
-            {
-                islunawalk = game.sendLunaLeft(dt);                
-            }
+                newlunawalk = game.sendLunaLeft(dt);
             if (Keyboard.IsKeyPressed(Keyboard.Key.Right) || Keyboard.IsKeyPressed(Keyboard.Key.D))
-            {
-                islunawalk = game.sendLunaRight(dt);                
-            }
+                newlunawalk = game.sendLunaRight(dt);
+            if ((newlunawalk) && (!islunawalk)) snd_galop.Play();
+            if ((!newlunawalk) && (islunawalk)) snd_galop.Stop();
+            islunawalk = newlunawalk;
+
+            if ((game.getLaser().ison) && (!islaseron)) snd_laser.Play();
+            if ((!game.getLaser().ison) && (islaseron)) snd_laser.Stop();
+            islaseron = game.getLaser().ison;
+
             celestia_walk.Update(dt);
             celestia_eat.Update(dt);
             luna_walk.Update(dt);
