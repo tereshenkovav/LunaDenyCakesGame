@@ -99,6 +99,8 @@ namespace LunaDenyCakesGame
                         setNextScene(new SceneMenu());
                         return SceneResult.Switch;
                     }
+                    for (int i=0; i<actions.Count; i++)
+                        if (keyEventArg.Code == Keyboard.Key.Num1+i) tekaction = i;
                 }
 
                 if (args.e is MouseButtonEventArgs mouseButtonEventArgs)
