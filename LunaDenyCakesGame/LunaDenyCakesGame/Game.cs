@@ -22,6 +22,7 @@ namespace LunaDenyCakesGame
         public int zoneidx;
         public float x;
         public float vx;
+        public bool removed;
     }
 
     public class Laser
@@ -59,6 +60,7 @@ namespace LunaDenyCakesGame
         private static int PONYW = 30;
         private static int SHIELDTIME = 10;
         private static int CHICKENV = 50;
+        private static float LASERPOWER = 1.0f;
         // Заменить на наблюдателя или глобальный объект создания эффектов
         public CreateFallenChicken procFallenChicken = null;
 
@@ -222,7 +224,7 @@ namespace LunaDenyCakesGame
             else
                 if (ObjModule.rnd.Next(2) == 1) vsig = 1; else vsig = -1;
 
-            chickens.Add(new Chicken() { x = chickenx, zoneidx = idx, vx = CHICKENV*vsig });
+            chickens.Add(new Chicken() { x = chickenx, zoneidx = idx, vx = CHICKENV*vsig, removed = false });
 
             return true;
         }
@@ -254,6 +256,23 @@ namespace LunaDenyCakesGame
             foreach (var chicken in chickens)
                 chicken.x += chicken.vx * dt;
 
+            if (laser.ison)
+            {
+                foreach (var cake in cakes)
+                    if (cake.zoneidx==lunazoneidx)
+                    {
+                        if ((laser.dir == Direction.Left) && (cake.x <= lunax)) cake.hp -= LASERPOWER * dt; else
+                        if ((laser.dir == Direction.Right) && (cake.x >= lunax)) cake.hp -= LASERPOWER * dt;
+                    }
+                foreach (var chicken in chickens)
+                    if (chicken.zoneidx == lunazoneidx)
+                    {
+                        if ((laser.dir == Direction.Left) && (chicken.x <= lunax)) chicken.removed = true;
+                        else
+                        if ((laser.dir == Direction.Right) && (chicken.x >= lunax)) chicken.removed = true;
+                    }
+            }
+
             int i = 0;
             while (i<chickens.Count)
             {
@@ -263,6 +282,20 @@ namespace LunaDenyCakesGame
                     if (procFallenChicken != null) procFallenChicken(chickens[i].x, zones[chickens[i].zoneidx].y, chickens[i].vx, 200);
                     chickens.RemoveAt(i);
                 }
+                else 
+                if (chickens[i].removed)
+                {
+                    chickens.RemoveAt(i);
+                }
+                else
+                    i++;
+            }
+
+            i = 0;
+            while (i < cakes.Count)
+            {
+                if (cakes[i].hp<=0)
+                    cakes.RemoveAt(i);
                 else
                     i++;
             }
