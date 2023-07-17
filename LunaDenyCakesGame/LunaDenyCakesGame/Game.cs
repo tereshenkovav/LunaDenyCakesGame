@@ -279,7 +279,7 @@ namespace LunaDenyCakesGame
             if (laser.ison)
             {
                 foreach (var cake in cakes)
-                    if (cake.zoneidx==lunazoneidx)
+                    if ((cake.zoneidx==lunazoneidx)&&(cake.shieldleft<=0.0f))
                     {
                         if ((laser.dir == Direction.Left) && (cake.x <= lunax)) cake.hp -= LASERPOWER * dt; else
                         if ((laser.dir == Direction.Right) && (cake.x >= lunax)) cake.hp -= LASERPOWER * dt;
