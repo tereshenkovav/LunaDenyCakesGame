@@ -172,7 +172,18 @@ namespace LunaDenyCakesGame
 
             game.Update(dt);
 
-            foreach(var effect in effects)
+            if (game.isFail())
+            {
+                setNextScene(new SceneGameOver(false,game.getGameOverMsg()));
+                return SceneResult.Switch;
+            }
+            if (game.isWin())
+            {
+                setNextScene(new SceneGameOver(true, game.getGameOverMsg()));
+                return SceneResult.Switch;
+            }
+
+            foreach (var effect in effects)
             {
                 effect.x += effect.vx * dt;
                 effect.y += effect.vy * dt;

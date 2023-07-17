@@ -16,7 +16,7 @@ namespace LunaDenyCakesGame
     }
 
     public enum Direction {  No, Left, Right };
-
+    
     public class Chicken
     {
         public int zoneidx;
@@ -44,6 +44,8 @@ namespace LunaDenyCakesGame
 
     public class Game
     {
+        public enum GameState { Normal, Win, Fail };
+
         private List<Zone> zones;
         private List<Chicken> chickens;        
         private List<Cake> cakes;
@@ -61,6 +63,10 @@ namespace LunaDenyCakesGame
         private static int SHIELDTIME = 10;
         private static int CHICKENV = 50;
         private static float LASERPOWER = 1.0f;
+        private GameState state;
+        private String gameovermsg;
+        // Переделать на таймер-событие
+        private float fail_counter = 0.0f;
         // Заменить на наблюдателя или глобальный объект создания эффектов
         public CreateFallenChicken procFallenChicken = null;
 
@@ -93,6 +99,8 @@ namespace LunaDenyCakesGame
             lunax = (zones[6].left + zones[6].right) / 2;
             lunazoneidx = 6;
             lunadir = Direction.Right;
+            state = GameState.Normal;
+            gameovermsg = "";
         }
         public Vector2f getCelestiaPos()
         {
@@ -249,6 +257,18 @@ namespace LunaDenyCakesGame
             cakes[idx].shieldleft = SHIELDTIME;
             return true;
         }
+        public bool isWin()
+        {
+            return state==GameState.Win;
+        }
+        public bool isFail()
+        {
+            return state == GameState.Fail;
+        }
+        public String getGameOverMsg()
+        {
+            return gameovermsg;
+        }
         public void Update(float dt)
         {
             foreach (var cake in cakes)
@@ -271,6 +291,13 @@ namespace LunaDenyCakesGame
                         else
                         if ((laser.dir == Direction.Right) && (chicken.x >= lunax)) chicken.removed = true;
                     }
+                if (celestiazoneidx==lunazoneidx)
+                {
+                    if ((laser.dir == Direction.Left) && (celestiax <= lunax))
+                        if (fail_counter == 0.0f) fail_counter = 0.5f;
+                    if ((laser.dir == Direction.Right) && (celestiax >= lunax))
+                        if (fail_counter == 0.0f) fail_counter = 0.5f;
+                }
             }
 
             int i = 0;
@@ -298,6 +325,22 @@ namespace LunaDenyCakesGame
                     cakes.RemoveAt(i);
                 else
                     i++;
+            }
+
+            if (cakes.Count == 0)
+            {
+                gameovermsg = ObjModule.texts.getText("msg_cakeover");
+                state = GameState.Win;
+            }
+
+            if (fail_counter > 0.0f)
+            {
+                fail_counter -= dt;
+                if (fail_counter <= 0.0f)
+                {
+                    gameovermsg = ObjModule.texts.getText("msg_laserfail");
+                    state = GameState.Fail;
+                }
             }
         }        
     }

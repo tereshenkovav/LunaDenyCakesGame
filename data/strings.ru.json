@@ -7,6 +7,12 @@
   "menufullscreen":"Полный экран",
   "menulang":"Язык",
   "menuexit":"Выход",
+  "menurestart":"Заново",
+  "text_win":"Победа!",
+  "text_fail":"Поражение!",
   "text_on":"Вкл",
-  "text_off":"Выкл"
+  "text_off":"Выкл",
+  "msg_laserfail":"Селестия поражена роголазером",
+  "msg_cakeover":"Все кексики уничтожены",
+  "msg_celestiafail":"Селестия переела кексов"
 }
