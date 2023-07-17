@@ -45,6 +45,7 @@ namespace LunaDenyCakesGame
         private int tekaction;
         private const int INDICATOR_W = 48;
         private List<Effect> effects;
+        private Color manacolor = new Color(35, 20, 250);
 
         public override void Init()
         {
@@ -255,6 +256,19 @@ namespace LunaDenyCakesGame
             {
                 chickenfallen.Rotation = effect.angle;
                 DrawMirrHorzAt(window, chickenfallen, effect.x, effect.y - 30,effect.vx<0);
+            }
+
+            text.FillColor = manacolor;
+            DrawTextCentered(window, text, game.getMana().ToString(), ObjModule.opt.getWindowWidth() - 40, 5);
+
+            using (RectangleShape rect = new RectangleShape())
+            {
+                rect.Origin = new Vector2f(0, 0);
+                rect.OutlineThickness = 0;
+                rect.Size = new Vector2f(30, 700*(float)game.getMana()/(float)game.balance.MaxMana);
+                rect.Position = new Vector2f(ObjModule.opt.getWindowWidth() - 40, ObjModule.opt.getWindowHeigth()-rect.Size.Y);
+                rect.FillColor = manacolor;
+                window.Draw(rect);
             }
 
             // Курсор

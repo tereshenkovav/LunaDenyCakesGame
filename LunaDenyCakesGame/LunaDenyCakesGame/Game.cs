@@ -58,13 +58,11 @@ namespace LunaDenyCakesGame
         private float lunax;
         private Direction lunadir;
         private int lunazoneidx;
-        private static int LUNAVX = 100;
         private static int PONYW = 30;
-        private static int SHIELDTIME = 10;
-        private static int CHICKENV = 50;
-        private static float LASERPOWER = 1.0f;
         private GameState state;
         private String gameovermsg;
+        public Balance balance;
+        public float mana;
         // Переделать на таймер-событие
         private float fail_counter = 0.0f;
         // Заменить на наблюдателя или глобальный объект создания эффектов
@@ -101,6 +99,16 @@ namespace LunaDenyCakesGame
             lunadir = Direction.Right;
             state = GameState.Normal;
             gameovermsg = "";
+            balance = new Balance();
+            mana = balance.MaxMana;
+        }
+        public int getMana()
+        {
+            return (int)mana;
+        }
+        public void decMana(int delta)
+        {
+            if (mana>delta) mana-=delta;
         }
         public Vector2f getCelestiaPos()
         {
@@ -166,7 +174,7 @@ namespace LunaDenyCakesGame
         {
             if (laser.ison) return false;
 
-            float newlunax = lunax - LUNAVX * dt;
+            float newlunax = lunax - balance.LunaVel * dt;
             if (newlunax >= zones[lunazoneidx].left + PONYW / 2)
             {
                 lunax = newlunax;
@@ -179,7 +187,7 @@ namespace LunaDenyCakesGame
         {
             if (laser.ison) return false;
 
-            float newlunax = lunax + LUNAVX * dt;
+            float newlunax = lunax + balance.LunaVel * dt;
             if (newlunax <= zones[lunazoneidx].right - PONYW / 2)
             {
                 lunax = newlunax;
@@ -232,7 +240,7 @@ namespace LunaDenyCakesGame
             else
                 if (ObjModule.rnd.Next(2) == 1) vsig = 1; else vsig = -1;
 
-            chickens.Add(new Chicken() { x = chickenx, zoneidx = idx, vx = CHICKENV*vsig, removed = false });
+            chickens.Add(new Chicken() { x = chickenx, zoneidx = idx, vx = balance.ChickenVel* vsig, removed = false });
 
             return true;
         }
@@ -254,7 +262,7 @@ namespace LunaDenyCakesGame
         {
             int idx = getCakeAt(mxy);
             if (idx == -1) return false;
-            cakes[idx].shieldleft = SHIELDTIME;
+            cakes[idx].shieldleft = balance.ShieldTime;
             return true;
         }
         public bool isWin()
@@ -270,7 +278,7 @@ namespace LunaDenyCakesGame
             return gameovermsg;
         }
         public void Update(float dt)
-        {
+        {            
             foreach (var cake in cakes)
                 if (cake.shieldleft>0) cake.shieldleft -= dt;
             foreach (var chicken in chickens)
@@ -279,10 +287,11 @@ namespace LunaDenyCakesGame
             if (laser.ison)
             {
                 foreach (var cake in cakes)
-                    if ((cake.zoneidx==lunazoneidx)&&(cake.shieldleft<=0.0f))
+                    if ((cake.zoneidx == lunazoneidx) && (cake.shieldleft <= 0.0f))
                     {
-                        if ((laser.dir == Direction.Left) && (cake.x <= lunax)) cake.hp -= LASERPOWER * dt; else
-                        if ((laser.dir == Direction.Right) && (cake.x >= lunax)) cake.hp -= LASERPOWER * dt;
+                        if ((laser.dir == Direction.Left) && (cake.x <= lunax)) cake.hp -= balance.LaserPowerInSec * dt;
+                        else
+                        if ((laser.dir == Direction.Right) && (cake.x >= lunax)) cake.hp -= balance.LaserPowerInSec * dt;
                     }
                 foreach (var chicken in chickens)
                     if (chicken.zoneidx == lunazoneidx)
@@ -291,13 +300,25 @@ namespace LunaDenyCakesGame
                         else
                         if ((laser.dir == Direction.Right) && (chicken.x >= lunax)) chicken.removed = true;
                     }
-                if (celestiazoneidx==lunazoneidx)
+                if (celestiazoneidx == lunazoneidx)
                 {
                     if ((laser.dir == Direction.Left) && (celestiax <= lunax))
                         if (fail_counter == 0.0f) fail_counter = 0.5f;
                     if ((laser.dir == Direction.Right) && (celestiax >= lunax))
                         if (fail_counter == 0.0f) fail_counter = 0.5f;
                 }
+                mana -= balance.LaserCostInSec * dt;
+                if (mana <= 0)
+                {
+                    mana = 0;
+                    laser.ison = false;
+                }
+            }
+            else
+            {
+                // Заменить на значение с ограничителем
+                mana += balance.RegenManaInSec * dt;
+                if (mana >= balance.MaxMana) mana = balance.MaxMana;
             }
 
             int i = 0;

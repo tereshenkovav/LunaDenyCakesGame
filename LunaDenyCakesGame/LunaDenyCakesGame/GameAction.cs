@@ -19,6 +19,7 @@ namespace LunaDenyCakesGame
         public abstract string getCode();
         public abstract bool isAllowed(Vector2i mxy);
         public abstract bool Apply(Vector2i mxy);
+        public abstract int getCost();
         public virtual void Finish()
         {
             // No action default
@@ -36,12 +37,17 @@ namespace LunaDenyCakesGame
         }
         public override bool isAllowed(Vector2i mxy)
         {            
-            return (game.getZoneByXY(mxy) != -1);
+            return (game.getZoneByXY(mxy) != -1)&&(game.getMana()>=getCost());
         }
         public override bool Apply(Vector2i mxy)
         {
             if (!isAllowed(mxy)) return false;
+            game.decMana(getCost());
             return game.jumpLunaToXY(mxy);
+        }
+        public override int getCost()
+        {
+            return game.balance.JumpCost;
         }
     }
 
@@ -56,12 +62,17 @@ namespace LunaDenyCakesGame
         }
         public override bool isAllowed(Vector2i mxy)
         {
-            return (game.getZoneByXY(mxy) != -1);
+            return (game.getZoneByXY(mxy) != -1) && (game.getMana() >= getCost());
         }
         public override bool Apply(Vector2i mxy)
         {
             if (!isAllowed(mxy)) return false;
+            game.decMana(getCost());
             return game.addChicken(mxy);
+        }
+        public override int getCost()
+        {
+            return game.balance.ChickenCost;
         }
     }
 
@@ -76,12 +87,17 @@ namespace LunaDenyCakesGame
         }
         public override bool isAllowed(Vector2i mxy)
         {
-            return (game.getCakeAt(mxy)!=-1);
+            return (game.getCakeAt(mxy)!=-1) && (game.getMana() >= getCost());
         }
         public override bool Apply(Vector2i mxy)
         {
             if (!isAllowed(mxy)) return false;
+            game.decMana(getCost());
             return game.setShieldToCakeByXY(mxy);
+        }
+        public override int getCost()
+        {
+            return game.balance.ShieldCost;
         }
     }
 
@@ -96,7 +112,7 @@ namespace LunaDenyCakesGame
         }
         public override bool isAllowed(Vector2i mxy)
         {
-            return (game.getZoneByXY(mxy) == game.getLunaZoneIdx());
+            return (game.getZoneByXY(mxy) == game.getLunaZoneIdx()) && (game.getMana() >= getCost());
         }
         public override bool Apply(Vector2i mxy)
         {
@@ -107,6 +123,10 @@ namespace LunaDenyCakesGame
         public override void Finish()
         {
             game.finishLaser();
+        }
+        public override int getCost()
+        {
+            return (int)game.balance.LaserCostInSec;
         }
     }
 }
