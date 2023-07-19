@@ -115,11 +115,19 @@ namespace LunaDenyCakesGame
             iscelestiawalk = false;
             islaseron = false;
             oldcelestiazoneidx = game.getCelestiaZoneIdx();
+
+            // Добавить пул звуков для управления
+            snd_galop.Volume = ObjModule.opt.isSoundOn() ? 100.0f : 0.0f;
+            snd_galop2.Volume = ObjModule.opt.isSoundOn() ? 100.0f : 0.0f;
+            snd_laser.Volume = ObjModule.opt.isSoundOn() ? 100.0f : 0.0f;
+            snd_teleport.Volume = ObjModule.opt.isSoundOn() ? 100.0f : 0.0f;
+            snd_chicken.Volume = ObjModule.opt.isSoundOn() ? 100.0f : 0.0f;
         }
 
         public override void UnInit()
         {
             snd_galop.Stop();
+            snd_galop2.Stop();
             snd_laser.Stop();
             snd_teleport.Stop();
             snd_chicken.Stop();
