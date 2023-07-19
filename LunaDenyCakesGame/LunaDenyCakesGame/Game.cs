@@ -126,6 +126,10 @@ namespace LunaDenyCakesGame
         {
             return eaten != null;
         }
+        public int getCelestiaZoneIdx()
+        {
+            return celestiazoneidx;
+        }
         public Vector2f getLunaPos()
         {
             return new Vector2f(lunax, zones[lunazoneidx].y);

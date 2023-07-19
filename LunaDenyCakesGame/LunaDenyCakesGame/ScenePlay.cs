@@ -32,6 +32,7 @@ namespace LunaDenyCakesGame
         private SfmlAnimation laser;
         private SfmlAnimation shield;
         private Sound snd_galop;
+        private Sound snd_galop2;
         private Sound snd_laser;
         private Sound snd_teleport;
         private Sound snd_chicken;
@@ -39,7 +40,9 @@ namespace LunaDenyCakesGame
         private Color[] colorset;
         private Game game;
         private bool islunawalk;
+        private bool iscelestiawalk;
         private bool islaseron;
+        private int oldcelestiazoneidx;
         private List<GameAction> actions;
         private Dictionary<string,Sprite> actionsprites;
         private int tekaction;
@@ -55,6 +58,8 @@ namespace LunaDenyCakesGame
             chickenfallen = SfmlHelper.LoadSprite("images/chicken.png", SpriteLoaderOptions.sloCentered);
             snd_galop = SfmlHelper.LoadSound("sounds/galop.ogg");
             snd_galop.Loop = true;
+            snd_galop2 = SfmlHelper.LoadSound("sounds/galop.ogg");
+            snd_galop2.Loop = true;
             snd_laser = SfmlHelper.LoadSound("sounds/laser.ogg");
             snd_laser.Loop = true;
             snd_teleport = SfmlHelper.LoadSound("sounds/teleport.ogg");
@@ -106,7 +111,9 @@ namespace LunaDenyCakesGame
             effects = new List<Effect>();
 
             islunawalk = false;
+            iscelestiawalk = false;
             islaseron = false;
+            oldcelestiazoneidx = game.getCelestiaZoneIdx();
         }
 
         public override void UnInit()
@@ -159,6 +166,17 @@ namespace LunaDenyCakesGame
             if ((newlunawalk) && (!islunawalk)) snd_galop.Play();
             if ((!newlunawalk) && (islunawalk)) snd_galop.Stop();
             islunawalk = newlunawalk;
+
+            bool newcelestiawalk = !game.isCelestiaEaten();
+            if ((newcelestiawalk) && (!iscelestiawalk)) snd_galop2.Play();
+            if ((!newcelestiawalk) && (iscelestiawalk)) snd_galop2.Stop();
+            iscelestiawalk = newcelestiawalk;
+
+            if (oldcelestiazoneidx!=game.getCelestiaZoneIdx())
+            {
+                snd_teleport.Play();
+                oldcelestiazoneidx = game.getCelestiaZoneIdx();
+            }
 
             if ((game.getLaser().ison) && (!islaseron)) snd_laser.Play();
             if ((!game.getLaser().ison) && (islaseron)) snd_laser.Stop();
