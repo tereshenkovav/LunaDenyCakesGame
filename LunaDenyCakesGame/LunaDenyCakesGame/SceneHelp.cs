@@ -5,39 +5,38 @@ using SFML.System;
 using SFML.Window;
 using SFML.Audio;
 using SfmlNetEngine;
+using System.IO;
 
 namespace LunaDenyCakesGame
 {
-    // Абстрактный класс меню - содержит ресурсы и шаблоны метода
-    public class SceneMenu : Scene
+    public class SceneHelp : Scene
     {
         // Ресурсы и константы
         private Text text;
+        private Text text_main;
         protected List<string> items;
-        private int TOP = 300;
+        private int TOP = 700;
         private int STEP = 70;
-        protected static Music music_menu = null;
-
+        private String help;
+                
         public override void Init()
         {
             text = new Text("", CommonData.font, 28);
+            text_main = new Text("", CommonData.font, 24);
+            text_main.FillColor = new Color(255, 255, 255);
+            help = File.ReadAllText(@"help.ru.txt");
+
+            text_main.DisplayedString = help;
+            text_main.Position = new Vector2f(30, 100);
+
             items = new List<string>();
             rebuildItems();
-            if (CommonData.music_main.Status != SoundStatus.Playing) CommonData.music_main.Play();
         }
-
+                
         private void rebuildItems()
         {
-            items.Clear();
-            items.Add(ObjModule.texts.getText("menustart"));
-            items.Add(ObjModule.texts.getText("menuhelp"));
-            items.Add(ObjModule.texts.getText("menusound") + " : " + 
-                ObjModule.texts.getText(ObjModule.opt.isSoundOn()? "text_on":"text_off"));
-            items.Add(ObjModule.texts.getText("menumusic") + " : " +
-                ObjModule.texts.getText(ObjModule.opt.isMusicOn() ? "text_on" : "text_off"));
-            items.Add(ObjModule.texts.getText("menufullscreen") + " : " +
-                ObjModule.texts.getText(ObjModule.opt.isFullScreen() ? "text_on" : "text_off"));
-            items.Add(ObjModule.texts.getText("menuexit"));
+            items.Clear();            
+            items.Add(ObjModule.texts.getText("menuback"));
         }
 
         // Проверка, входит ли курсор в позицию меню
@@ -66,7 +65,11 @@ namespace LunaDenyCakesGame
 
                 if (args.e is KeyEventArgs keyEventArg)
                 {
-                    if (keyEventArg.Code == Keyboard.Key.Escape) return SceneResult.Exit;
+                    if (keyEventArg.Code == Keyboard.Key.Escape)
+                    {
+                        setNextScene(new SceneMenu());
+                        return SceneResult.Switch;                        
+                    }
                 }
 
                 if (args.e is MouseButtonEventArgs mouseButtonEventArgs)
@@ -75,33 +78,10 @@ namespace LunaDenyCakesGame
                     {
                         if (isMousePosOverButton(0))
                         {
-                            setNextScene(new ScenePlay());
+                            setNextScene(new SceneMenu());
                             return SceneResult.Switch;
-                        }
-                        if (isMousePosOverButton(1))
-                        {
-                            setNextScene(new SceneHelp());
-                            return SceneResult.Switch;
-                        }
-                        if (isMousePosOverButton(2))
-                        {
-                            ObjModule.opt.invertSoundOn();
-                            rebuildItems();
-                        }
-                        if (isMousePosOverButton(3))
-                        {
-                            ObjModule.opt.invertMusicOn();
-                            CommonData.music_main.Volume = ObjModule.opt.isMusicOn() ? 100.0f : 0.0f;
-                            rebuildItems();
-                        }
-                        if (isMousePosOverButton(4))
-                        {
-                            ObjModule.opt.invertFullScreen();
-                            return SceneResult.RebuildWindow;
-                        }
-                        if (isMousePosOverButton(5)) return SceneResult.Exit;
-                    }
-                                
+                        }                        
+                    }                                
                 }
             }
             return SceneResult.Normal;
@@ -111,6 +91,18 @@ namespace LunaDenyCakesGame
         public override void Render(RenderWindow window)
         {
             DrawAt(window, CommonData.back, 0,0);
+
+            using (RectangleShape rect = new RectangleShape())
+            {
+                rect.Origin = new Vector2f(0, 0);
+                rect.OutlineThickness = 0;
+                rect.Size = new Vector2f(ObjModule.opt.getWindowWidth()-40, 520);
+                rect.Position = new Vector2f(20,80);
+                rect.FillColor = new Color(40,40,40,128);
+                window.Draw(rect);
+            }
+
+            window.Draw(text_main);
 
             // Рендер пунктов меню
             for (int i = 0; i < items.Count; i++)
@@ -123,9 +115,7 @@ namespace LunaDenyCakesGame
                 DrawAt(window, CommonData.button, ObjModule.opt.getWindowWidth() / 2, TOP + STEP * i);
                 DrawTextCentered(window, text, items[i], ObjModule.opt.getWindowWidth() / 2, TOP + STEP * i - 24);
             }
-
-            DrawAt(window, CommonData.logo, ObjModule.opt.getWindowWidth() / 2, 100);
-
+                        
             // Курсор
             DrawAt(window, CommonData.cursor, (Vector2f)getMousePosition());
         }

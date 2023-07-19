@@ -94,6 +94,13 @@ namespace SfmlNetEngine
             window.Draw(text);
         }
 
+        public void DrawText(RenderWindow window, Text text, String data, int x, int y)
+        {
+            text.DisplayedString = data;
+            text.Position = new Vector2f(x, y);
+            window.Draw(text);
+        }
+
         public void DrawIndicator(RenderWindow window, float x, float y, int w, int h, float v, Color[] colorset)
         {
             if (v < 0.0f) v = 0.0f;
