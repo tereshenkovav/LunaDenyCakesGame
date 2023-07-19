@@ -23,6 +23,7 @@ namespace LunaDenyCakesGame
             text = new Text("", CommonData.font, 28);
             items = new List<string>();
             rebuildItems();
+            if (CommonData.music_main.Status != SoundStatus.Playing) CommonData.music_main.Play();
         }
 
         private void rebuildItems()
@@ -85,6 +86,7 @@ namespace LunaDenyCakesGame
                         if (isMousePosOverButton(3))
                         {
                             ObjModule.opt.invertMusicOn();
+                            CommonData.music_main.Volume = ObjModule.opt.isMusicOn() ? 100.0f : 0.0f;
                             rebuildItems();
                         }
                         if (isMousePosOverButton(4))

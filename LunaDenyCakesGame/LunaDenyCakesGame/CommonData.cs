@@ -19,6 +19,7 @@ namespace LunaDenyCakesGame
         public static Sprite back;
         public static Color color_over;
         public static Color color_norm;
+        public static Music music_main;
 
         public static void Load()
         {
@@ -27,7 +28,10 @@ namespace LunaDenyCakesGame
             button = SfmlHelper.LoadSprite(@"images/button.png", SpriteLoaderOptions.sloCentered);
             logo = SfmlHelper.LoadSprite(@"images/logo.png", SpriteLoaderOptions.sloCentered);
             back = SfmlHelper.LoadSprite(@"images/back.png");
-          
+
+            music_main = new Music(@"music/music_main.ogg");
+            music_main.Loop = true;
+
             color_over = SfmlHelper.createSFMLColor(255, 255, 255);
             color_norm = SfmlHelper.createSFMLColor(200, 200, 200);
         }
