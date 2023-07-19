@@ -23,5 +23,6 @@ namespace LunaDenyCakesGame
         public int MaxMana = 200;
         public float RegenManaInSec = 5.0f;
         public float EatInSec = 1.0f;
+        public float CelestiaStartHP = 5.0f;
     }
 }

@@ -59,6 +59,7 @@ namespace LunaDenyCakesGame
         private float lunax;
         private Direction lunadir;
         private int lunazoneidx;
+        private float celestiahp;
         private static int PONYW = 30;
         private GameState state;
         private String gameovermsg;
@@ -105,6 +106,7 @@ namespace LunaDenyCakesGame
             mana = balance.MaxMana;
             celestiadir = Direction.No;
             eaten = null;
+            celestiahp = balance.CelestiaStartHP;
         }
         public int getMana()
         {
@@ -129,6 +131,10 @@ namespace LunaDenyCakesGame
         public int getCelestiaZoneIdx()
         {
             return celestiazoneidx;
+        }
+        public int getCelestiaHPin100()
+        {
+            return (int)(100*(celestiahp/balance.CelestiaStartHP));
         }
         public Vector2f getLunaPos()
         {
@@ -378,7 +384,10 @@ namespace LunaDenyCakesGame
             if (eaten != null)
             {
                 celestiadir = (eaten.x - celestiax > 0) ? Direction.Right : Direction.Left;
-                eaten.hp -= balance.EatInSec * dt;
+                float dh = balance.EatInSec * dt;
+                if (dh > eaten.hp) dh = eaten.hp;
+                eaten.hp -= dh;
+                celestiahp -= dh;
             }
             else
             {
@@ -432,6 +441,12 @@ namespace LunaDenyCakesGame
                     gameovermsg = ObjModule.texts.getText("msg_laserfail");
                     state = GameState.Fail;
                 }
+            }
+
+            if (celestiahp <= 0)
+            {
+                gameovermsg = ObjModule.texts.getText("msg_celestiafail");
+                state = GameState.Fail;
             }
         }        
     }
