@@ -237,6 +237,17 @@ namespace LunaDenyCakesGame
             if (lunax > zones[idx].right - PONYW / 2) lunax = zones[idx].right - PONYW / 2;
             return true;
         }
+        public void jumpCelestiaToBestZone()
+        {
+            var zoneswithcakes = new List<int>();
+            foreach (var cake in cakes)
+                if (cake.shieldleft <= 0.0f) 
+                    if (!zoneswithcakes.Contains(cake.zoneidx)) zoneswithcakes.Add(cake.zoneidx);
+            foreach (var chicken in chickens)
+                zoneswithcakes.Remove(chicken.zoneidx);
+            if (zoneswithcakes.Count > 0)
+                celestiazoneidx = zoneswithcakes[ObjModule.rnd.Next(zoneswithcakes.Count)];
+        }
         public bool addChicken(Vector2i mxy)
         {
             int idx = getZoneByXY(mxy);
@@ -352,6 +363,13 @@ namespace LunaDenyCakesGame
             }
 
             // Расчет Селестии
+            foreach(var chicken in chickens) 
+                if (chicken.zoneidx==celestiazoneidx)
+                {
+                    jumpCelestiaToBestZone();
+                    break;
+                }
+
             eaten = null;
             foreach(var cake in cakes)
                 if ((Math.Abs(celestiax-cake.x)<(PONYW/2+CAKEW/2))&&(cake.zoneidx == celestiazoneidx)&&(cake.shieldleft<=0.0f))
@@ -378,11 +396,7 @@ namespace LunaDenyCakesGame
                 if (near == null) // Не найден кексик на уровне
                 { 
                     celestiadir = Direction.No;
-                    var zoneswithcakes = new List<int>() ;
-                    foreach (var cake in cakes)
-                        if (cake.shieldleft <= 0.0f) zoneswithcakes.Add(cake.zoneidx);
-                    if (zoneswithcakes.Count > 0)
-                        celestiazoneidx = zoneswithcakes[ObjModule.rnd.Next(zoneswithcakes.Count)];
+                    jumpCelestiaToBestZone();
                 }
                 else
                 {
