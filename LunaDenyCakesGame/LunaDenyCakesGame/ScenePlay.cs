@@ -211,24 +211,24 @@ namespace LunaDenyCakesGame
                 for (int j=0; j<n; j++)
                     DrawAt(window, block, game.getZone(i).left+j*84, game.getZone(i).y);
             }
-
-            for (int i = 0; i < game.getCakeCount(); i++)
-            {
-                DrawAt(window, cakes[game.getCakeSpriteIdx(i)], game.getCakePos(i).X, game.getCakePos(i).Y-30);
-                if (game.isCakeShieldOn(i))
-                    DrawAt(window, shield, game.getCakePos(i).X, game.getCakePos(i).Y - 30);
-                if (game.getCakeHP(i)<1.0f)
-                    DrawIndicator(window, game.getCakePos(i).X - INDICATOR_W / 2, game.getCakePos(i).Y, INDICATOR_W, 8, game.getCakeHP(i), colorset);
-            }
-
+                        
             for (int i = 0; i < game.getChickenCount(); i++)
                 DrawMirrHorzAt(window, chicken, game.getChickenPos(i).X,game.getChickenPos(i).Y - 30, game.getChickenDir(i)==Direction.Left);
-                        
-            DrawMirrHorzAt(window, game.isCelestiaEat()?celestia_eat:celestia_walk, 
-                    game.getCelestiaPos().X,game.getCelestiaPos().Y-128,false);
+
+            DrawMirrHorzAt(window, game.isCelestiaEaten()?celestia_eat:celestia_walk, 
+                    game.getCelestiaPos().X,game.getCelestiaPos().Y-128, game.getCelestiaDir() == Direction.Left);
 
             DrawMirrHorzAt(window, islunawalk ? luna_walk : luna_wait,
                     game.getLunaPos().X, game.getLunaPos().Y - 126,game.getLunaDir()==Direction.Left);
+
+            for (int i = 0; i < game.getCakeCount(); i++)
+            {
+                DrawAt(window, cakes[game.getCakeSpriteIdx(i)], game.getCakePos(i).X, game.getCakePos(i).Y - 30);
+                if (game.isCakeShieldOn(i))
+                    DrawAt(window, shield, game.getCakePos(i).X, game.getCakePos(i).Y - 30);
+                if (game.getCakeHP(i) < 1.0f)
+                    DrawIndicator(window, game.getCakePos(i).X - INDICATOR_W / 2, game.getCakePos(i).Y, INDICATOR_W, 8, game.getCakeHP(i), colorset);
+            }
 
             if (game.getLaser().ison)
             {

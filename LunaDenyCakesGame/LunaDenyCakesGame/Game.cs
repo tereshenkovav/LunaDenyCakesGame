@@ -55,6 +55,7 @@ namespace LunaDenyCakesGame
         private static int CAKEW = 48;
         private float celestiax;
         private int celestiazoneidx;
+        private Direction celestiadir;
         private float lunax;
         private Direction lunadir;
         private int lunazoneidx;
@@ -63,6 +64,7 @@ namespace LunaDenyCakesGame
         private String gameovermsg;
         public Balance balance;
         public float mana;
+        private Cake eaten;
         // Переделать на таймер-событие
         private float fail_counter = 0.0f;
         // Заменить на наблюдателя или глобальный объект создания эффектов
@@ -101,6 +103,8 @@ namespace LunaDenyCakesGame
             gameovermsg = "";
             balance = new Balance();
             mana = balance.MaxMana;
+            celestiadir = Direction.No;
+            eaten = null;
         }
         public int getMana()
         {
@@ -114,9 +118,13 @@ namespace LunaDenyCakesGame
         {
             return new Vector2f(celestiax,zones[celestiazoneidx].y);
         }
-        public bool isCelestiaEat()
+        public Direction getCelestiaDir()
         {
-            return false;
+            return celestiadir;
+        }
+        public bool isCelestiaEaten()
+        {
+            return eaten != null;
         }
         public Vector2f getLunaPos()
         {
@@ -339,6 +347,50 @@ namespace LunaDenyCakesGame
                     i++;
             }
 
+            // Расчет Селестии
+            eaten = null;
+            foreach(var cake in cakes)
+                if ((Math.Abs(celestiax-cake.x)<(PONYW/2+CAKEW/2))&&(cake.zoneidx == celestiazoneidx)&&(cake.shieldleft<=0.0f))
+                    eaten = cake;
+
+            if (eaten != null)
+            {
+                celestiadir = (eaten.x - celestiax > 0) ? Direction.Right : Direction.Left;
+                eaten.hp -= balance.EatInSec * dt;
+            }
+            else
+            {
+                Cake near = null;
+                float dist = 99999;
+                foreach (var cake in cakes)
+                {
+                    if ((cake.zoneidx == celestiazoneidx) && (cake.shieldleft <= 0.0f))
+                        if (dist > Math.Abs(celestiax - cake.x))
+                        {
+                            dist = Math.Abs(celestiax - cake.x);
+                            near = cake;
+                        }
+                }
+                if (near == null) // Не найден кексик на уровне
+                { 
+                    celestiadir = Direction.No;
+                    var zoneswithcakes = new List<int>() ;
+                    foreach (var cake in cakes)
+                        if (cake.shieldleft <= 0.0f) zoneswithcakes.Add(cake.zoneidx);
+                    if (zoneswithcakes.Count > 0)
+                        celestiazoneidx = zoneswithcakes[ObjModule.rnd.Next(zoneswithcakes.Count)];
+                }
+                else
+                {
+                    celestiadir = (near.x - celestiax > 0) ? Direction.Right : Direction.Left;
+                    if (celestiadir == Direction.Left) 
+                        celestiax -= balance.CelestiaVel * dt;
+                    else
+                        celestiax += balance.CelestiaVel * dt;
+                }
+            }
+
+            // Заменить на обработку коллекции с условием удаления
             i = 0;
             while (i < cakes.Count)
             {

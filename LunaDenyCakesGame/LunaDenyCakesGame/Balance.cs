@@ -12,6 +12,7 @@ namespace LunaDenyCakesGame
     public class Balance
     {
         public int LunaVel = 100;
+        public int CelestiaVel = 200;
         public int ShieldTime = 10;
         public int ChickenVel = 50;
         public float LaserPowerInSec = 1.0f;
@@ -21,5 +22,6 @@ namespace LunaDenyCakesGame
         public int ChickenCost = 50;
         public int MaxMana = 200;
         public float RegenManaInSec = 5.0f;
+        public float EatInSec = 1.0f;
     }
 }
