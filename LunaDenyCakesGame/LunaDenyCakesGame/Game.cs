@@ -88,11 +88,15 @@ namespace LunaDenyCakesGame
 
             chickens = new List<Chicken>();
             
-            cakes = new List<Cake>();
+            cakes = new List<Cake>();            
             for (int i=0; i<zones.Count; i++)
             {
-                cakes.Add(new Cake() { x = 200, zoneidx = i, spriteidx = (2 * i + 0) % 3, hp = 1.0f, shieldleft = 0.0f });
-                cakes.Add(new Cake() { x = 800, zoneidx = i, spriteidx = (2 * i + 1) % 3, hp = 1.0f, shieldleft = 0.0f });
+                cakes.Add(new Cake() { x = 200 + (ObjModule.rnd.Next(200) - 100), zoneidx = i, spriteidx = ObjModule.rnd.Next(3), 
+                    hp = 1.0f, shieldleft = 0.0f });
+                cakes.Add(new Cake() { x = 500 + (ObjModule.rnd.Next(200) - 100), zoneidx = i, spriteidx = ObjModule.rnd.Next(3), 
+                    hp = 1.0f, shieldleft = 0.0f });
+                cakes.Add(new Cake() { x = 800 + (ObjModule.rnd.Next(200) - 100), zoneidx = i, spriteidx = ObjModule.rnd.Next(3), 
+                    hp = 1.0f, shieldleft = 0.0f });
             }
 
             celestiax = (zones[0].left+ zones[0].right)/ 2;
