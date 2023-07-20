@@ -99,13 +99,13 @@ namespace LunaDenyCakesGame
 
             actions = new List<GameAction>();
             actions.Add(new GAJump(game));
-            actions.Add(new GAChicken(game));
             actions.Add(new GALaser(game));
+            actions.Add(new GAChicken(game));
             actions.Add(new GAShield(game));
             actionsprites = new Dictionary<string, Sprite>();
             actionsprites.Add(actions[0].getCode(), SfmlHelper.LoadSprite("images/action_jump.png", SpriteLoaderOptions.sloCentered));
-            actionsprites.Add(actions[1].getCode(), SfmlHelper.LoadSprite("images/action_chicken.png", SpriteLoaderOptions.sloCentered));
-            actionsprites.Add(actions[2].getCode(), SfmlHelper.LoadSprite("images/action_laser.png", SpriteLoaderOptions.sloCentered));
+            actionsprites.Add(actions[1].getCode(), SfmlHelper.LoadSprite("images/action_laser.png", SpriteLoaderOptions.sloCentered));
+            actionsprites.Add(actions[2].getCode(), SfmlHelper.LoadSprite("images/action_chicken.png", SpriteLoaderOptions.sloCentered));
             actionsprites.Add(actions[3].getCode(), SfmlHelper.LoadSprite("images/action_shield.png", SpriteLoaderOptions.sloCentered));
             tekaction = 0;
 
@@ -156,10 +156,12 @@ namespace LunaDenyCakesGame
                             actions[tekaction].Finish();
                         else
                         {
-                            actions[tekaction].Apply(getMousePosition());
-                            // Тоже переделать на наблюдателя или коды эффектов
-                            if (actions[tekaction] is GAJump) snd_teleport.Play();
-                            if (actions[tekaction] is GAChicken) snd_chicken.Play();
+                            if (actions[tekaction].Apply(getMousePosition()))
+                            {
+                                // Тоже переделать на наблюдателя или коды эффектов
+                                if (actions[tekaction] is GAJump) snd_teleport.Play();
+                                if (actions[tekaction] is GAChicken) snd_chicken.Play();
+                            }
                         }
                     if ((mouseButtonEventArgs.Button == Mouse.Button.Right) && (!args.released))
                         tekaction = (tekaction + 1) % actions.Count;                    

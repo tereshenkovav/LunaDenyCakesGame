@@ -5,6 +5,7 @@ using SFML.System;
 using SFML.Window;
 using SFML.Audio;
 using SfmlNetEngine;
+using System.Linq;
 
 namespace LunaDenyCakesGame
 {
@@ -249,14 +250,20 @@ namespace LunaDenyCakesGame
         }
         public void jumpCelestiaToBestZone()
         {
-            var zoneswithcakes = new List<int>();
+            var zonesforjump = new List<int>();
             foreach (var cake in cakes)
                 if (cake.shieldleft <= 0.0f) 
-                    if (!zoneswithcakes.Contains(cake.zoneidx)) zoneswithcakes.Add(cake.zoneidx);
+                    if (!zonesforjump.Contains(cake.zoneidx)) zonesforjump.Add(cake.zoneidx);
             foreach (var chicken in chickens)
-                zoneswithcakes.Remove(chicken.zoneidx);
-            if (zoneswithcakes.Count > 0)
-                celestiazoneidx = zoneswithcakes[ObjModule.rnd.Next(zoneswithcakes.Count)];
+                zonesforjump.Remove(chicken.zoneidx);
+            // Если подходящие зоны с кексами и без куриц не найдены, но на зоне Селестии находится курица
+            if ((zonesforjump.Count == 0) && chickens.Exists((c) => c.zoneidx == celestiazoneidx)) {
+                // Добавляем все зоны, свободные от куриц
+                for (int i = 0; i < zones.Count; i++)
+                    if (!chickens.Exists((c) => c.zoneidx == i)) zonesforjump.Add(i);
+            }
+            if (zonesforjump.Count > 0)
+                celestiazoneidx = zonesforjump[ObjModule.rnd.Next(zonesforjump.Count)];
         }
         public bool addChicken(Vector2i mxy)
         {
@@ -447,7 +454,7 @@ namespace LunaDenyCakesGame
                 }
             }
 
-            if (celestiahp <= 0)
+            if (getCelestiaHPin100()<=0)
             {
                 gameovermsg = ObjModule.texts.getText("msg_celestiafail");
                 state = GameState.Fail;
