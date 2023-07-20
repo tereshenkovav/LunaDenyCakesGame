@@ -1,5 +1,4 @@
-﻿using System;
-using SfmlNetEngine;
+﻿using SfmlNetEngine;
 using System.IO;
 using System.Diagnostics;
 

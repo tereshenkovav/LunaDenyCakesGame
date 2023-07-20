@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
-using SFML.Audio;
 using SfmlNetEngine;
 
 namespace LunaDenyCakesGame
@@ -15,8 +14,7 @@ namespace LunaDenyCakesGame
         private Text text_main;
         protected List<string> items;
         private int TOP = 300;
-        private int STEP = 70;
-        protected static Music music_menu = null;
+        private int STEP = 70;        
         private bool iswin;
         private String msg;
         

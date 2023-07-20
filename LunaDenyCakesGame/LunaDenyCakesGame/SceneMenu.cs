@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -16,8 +15,7 @@ namespace LunaDenyCakesGame
         protected List<string> items;
         private int TOP = 300;
         private int STEP = 70;
-        protected static Music music_menu = null;
-
+        
         public override void Init()
         {
             text = new Text("", CommonData.font, 28);
