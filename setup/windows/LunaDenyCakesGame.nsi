@@ -2,7 +2,7 @@ Unicode True
 RequestExecutionLevel admin
 SetCompressor /SOLID zlib
 AutoCloseWindow true
-Icon ..\graphics\main.ico
+Icon ..\..\graphics\main.ico
 XPStyle on
 
 !include StrData.nsi
@@ -83,19 +83,19 @@ Section "$(GameGameName)"
   SkipSleep:
 
   SetOutPath $INSTDIR
-  File /r ..\build-LunaDenyCakesGame\*
-  File ..\graphics\main.ico
+  File /r ..\..\build-LunaDenyCakesGame\*
+  File ..\..\graphics\main.ico
 
   SetOutPath $INSTDIR\fonts
-  File /r ..\data\fonts\*
+  File /r ..\..\data\fonts\*
   SetOutPath $INSTDIR\images
-  File /r ..\data\images\*
+  File /r ..\..\data\images\*
   SetOutPath $INSTDIR\music
-  File /r ..\data\music\*
+  File /r ..\..\data\music\*
   SetOutPath $INSTDIR\sounds
-  File /r ..\data\sounds\*
+  File /r ..\..\data\sounds\*
   SetOutPath $INSTDIR
-  File /r ..\data\*
+  File /r ..\..\data\*
 
   StrCmp $is_update "1" Skip2
   

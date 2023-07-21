@@ -398,5 +398,5 @@ FodyWeavers.xsd
 *.sln.iml
 
 build-*
-setup/*.zip
-setup/*.exe
+setup/windows/*.zip
+setup/windows/*.exe
