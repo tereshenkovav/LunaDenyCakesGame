@@ -400,3 +400,4 @@ FodyWeavers.xsd
 build-*
 setup/windows/*.zip
 setup/windows/*.exe
+setup/linux/*.zip
