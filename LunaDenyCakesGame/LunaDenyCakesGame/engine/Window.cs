@@ -46,9 +46,10 @@ namespace SfmlNetEngine
             window.MouseButtonReleased += (sender, e) => { events.Add(new EventArgsEx(e, true)); };
 
             Clock clock = new Clock();
+            FPSCounter fps = new FPSCounter();
+            bool debuginfo = false;
 
-            // Начальный цикл игры - главное меню
-            
+            // Начальный цикл игры - главное меню            
             if (tekscene==null) tekscene = (Scene)Activator.CreateInstance(initscene);
             tekscene.Init();
 
@@ -59,8 +60,28 @@ namespace SfmlNetEngine
                 window.DispatchEvents();
                 tekscene.setMousePosition(Mouse.GetPosition(window));
 
+                float dt = clock.Restart().AsSeconds();
+                fps.Update(dt);
+
+                foreach (EventArgsEx args in events)
+                    if ((args.e is KeyEventArgs keyEventArg) && (args.released))
+                        if ((keyEventArg.Code == Keyboard.Key.F10) && (keyEventArg.Shift)) {
+                            debuginfo = !debuginfo;
+                            if (!debuginfo)
+                            {
+                                window.SetTitle(ObjModule.texts.getText("gametitle"));
+                                window.SetMouseCursorVisible(false);
+                            }
+                            else
+                            {
+                                window.SetMouseCursorVisible(true);
+                            }
+                        }
+
+                if (debuginfo) window.SetTitle(String.Format("FPS: {0}",fps.getFPS()));
+
                 // Обновление состояния игры
-                SceneResult r = tekscene.Frame(clock.Restart().AsSeconds(), events) ;
+                SceneResult r = tekscene.Frame(dt, events) ;
                 // Если выход, то стоп окну
                 switch (r)
                 {
