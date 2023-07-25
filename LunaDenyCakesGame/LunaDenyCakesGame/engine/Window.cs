@@ -34,7 +34,7 @@ namespace SfmlNetEngine
             if (ObjModule.opt.isFullScreen())
                 window = new RenderWindow(mode, ObjModule.texts.getText("gametitle"), Styles.Fullscreen);
             else
-                window = new RenderWindow(mode, ObjModule.texts.getText("gametitle"));
+                window = new RenderWindow(mode, ObjModule.texts.getText("gametitle"), Styles.Titlebar);
             window.SetVerticalSyncEnabled(true);
             window.SetMouseCursorVisible(false);
                             
