@@ -1,4 +1,6 @@
-﻿namespace LunaDenyCakesGame
+﻿using SfmlNetEngine;
+
+namespace LunaDenyCakesGame
 {
     public class Balance
     {
@@ -15,5 +17,24 @@
         public float RegenManaInSec = 5.0f;
         public float EatInSec = 0.20f;
         public float CelestiaStartHP = 5.0f;
+
+        public Balance(Difficult difficult)
+        {
+            switch(difficult)
+            {
+                case Difficult.Easy:
+                    EatInSec = 0.10f;
+                    RegenManaInSec = 10.0f;
+                    break;
+                case Difficult.Medi:
+                    break;
+                case Difficult.Hard:
+                    ShieldCost = 15;
+                    JumpCost = 50;
+                    ChickenCost = 30;
+                    LaserCostInSec = 40.0f;
+                    break;
+            }
+        }
     }
 }

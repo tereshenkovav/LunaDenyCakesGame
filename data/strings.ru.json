@@ -1,6 +1,7 @@
 ﻿{
   "gametitle":"Принцесса Луна против тортиков",
   "menustart":"Начать",
+  "menudiff":"Сложность",
   "menuhelp":"Справка",
   "menusound":"Звуки",
   "menumusic":"Музыка",
@@ -13,6 +14,9 @@
   "text_fail":"Поражение!",
   "text_on":"Вкл",
   "text_off":"Выкл",
+  "text_hard":"Высокая",
+  "text_medi":"Средняя",
+  "text_easy":"Низкая",
   "msg_laserfail":"Селестия поражена роголазером",
   "msg_cakeover":"Все кексики уничтожены",
   "msg_celestiafail":"Селестия переела кексов"
