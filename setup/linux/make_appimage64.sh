@@ -17,6 +17,10 @@ mkdir $appdir/usr
 mkdir $appdir/usr/bin
 mkdir $appdir/usr/lib
 
+cp ../../build-LunaDenyCakesGame/* $appdir/usr/bin
+
+cp /usr/lib64/libsfml* $appdir/usr/bin
+cp /usr/local/lib/libcsfml* $appdir/usr/bin
 cp /usr/lib64/libvorbis* $appdir/usr/lib
 cp /usr/lib64/libasound.so* $appdir/usr/lib
 cp /usr/lib64/libfreetype.so* $appdir/usr/lib
@@ -29,7 +33,6 @@ cp /usr/lib64/libpng16.so* $appdir/usr/lib
 cp /usr/lib64/libogg.so* $appdir/usr/lib
 cp /usr/lib64/libFLAC.so* $appdir/usr/lib
 
-cp ../../build-LunaDenyCakesGame/* $appdir/usr/bin
 chmod 777 $appdir/usr/bin/LunaDenyCakesGame
 cp -r ../../data/* $appdir/usr/bin
 
