@@ -12,6 +12,7 @@ namespace SfmlNetEngine
         private bool musicon = true;
         private bool fullscreen = false;
         private Difficult difficult = Difficult.Medi;
+        public KeyConfig keyconfig = new KeyConfig();
         
         public void setWindowParams(int w, int h)
         {

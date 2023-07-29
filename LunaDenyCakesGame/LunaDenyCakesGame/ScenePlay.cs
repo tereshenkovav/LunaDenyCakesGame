@@ -131,26 +131,30 @@ namespace LunaDenyCakesGame
             snd_teleport.Stop();
             snd_chicken.Stop();
         }
-        
+
         public override SceneResult Frame(float dt, IEnumerable<EventArgsEx> events)
         {
+            string actionname = "";
+
             // Обход событий, для Esc - выход из игры, для мыши - вызов действия меню
             foreach (EventArgsEx args in events)
-            {                
-                if ((args.e is KeyEventArgs keyEventArg)&&(!args.released))
-                {
+            {
+                if ((args.e is KeyEventArgs keyEventArg) && (!args.released))
                     if (keyEventArg.Code == Keyboard.Key.Escape)
                     {
                         setNextScene(new SceneMenu());
                         return SceneResult.Switch;
                     }
-                    for (int i=0; i<actions.Count; i++)
-                        if (keyEventArg.Code == Keyboard.Key.Num1+i) tekaction = i;
-                }
 
-                if (args.e is MouseButtonEventArgs mouseButtonEventArgs)
+                if (ObjModule.opt.keyconfig.isMatchEvent(args.e, ref actionname))
                 {
-                    if (mouseButtonEventArgs.Button == Mouse.Button.Left)
+                    if ((actionname == CommonData.action_sel_teleport) && (!args.released)) tekaction = 0;
+                    if ((actionname == CommonData.action_sel_laser) && (!args.released)) tekaction = 1;
+                    if ((actionname == CommonData.action_sel_chicken) && (!args.released)) tekaction = 2;
+                    if ((actionname == CommonData.action_sel_shield) && (!args.released)) tekaction = 3;
+                    if ((actionname == CommonData.action_switch) && (!args.released)) tekaction = (tekaction + 1) % actions.Count;
+                    if (actionname == CommonData.action_apply)
+                    {
                         if (args.released)
                             actions[tekaction].Finish();
                         else
@@ -162,17 +166,17 @@ namespace LunaDenyCakesGame
                                 if (actions[tekaction] is GAChicken) snd_chicken.Play();
                             }
                         }
-                    if ((mouseButtonEventArgs.Button == Mouse.Button.Right) && (!args.released))
-                        tekaction = (tekaction + 1) % actions.Count;                    
+                    }
                 }
             }
-            
+
             // Переделать на паттерн наблюдатель для звуковых эффектов
             bool newlunawalk = false;
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Left)|| Keyboard.IsKeyPressed(Keyboard.Key.A))
-                newlunawalk = game.sendLunaLeft(dt);
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Right) || Keyboard.IsKeyPressed(Keyboard.Key.D))
-                newlunawalk = game.sendLunaRight(dt);
+            if (ObjModule.opt.keyconfig.isMatchState(ref actionname)) 
+            {
+                if (actionname == CommonData.action_left) newlunawalk = game.sendLunaLeft(dt);
+                if (actionname == CommonData.action_right) newlunawalk = game.sendLunaRight(dt);
+            }
             if ((newlunawalk) && (!islunawalk)) snd_galop.Play();
             if ((!newlunawalk) && (islunawalk)) snd_galop.Stop();
             islunawalk = newlunawalk;
