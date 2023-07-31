@@ -62,9 +62,7 @@ namespace LunaDenyCakesGame
         private String gameovermsg;
         public Balance balance;
         public float mana;
-        private Cake eaten;
-        // Переделать на таймер-событие
-        private float fail_counter = 0.0f;
+        private Cake eaten;        
         // Заменить на наблюдателя или глобальный объект создания эффектов
         public CreateFallenChicken procFallenChicken = null;
 
@@ -339,9 +337,15 @@ namespace LunaDenyCakesGame
                 if (celestiazoneidx == lunazoneidx)
                 {
                     if ((laser.dir == Direction.Left) && (celestiax <= lunax))
-                        if (fail_counter == 0.0f) fail_counter = 0.5f;
+                    {
+                        gameovermsg = ObjModule.texts.getText("msg_laserfail");
+                        state = GameState.Fail;
+                    }
                     if ((laser.dir == Direction.Right) && (celestiax >= lunax))
-                        if (fail_counter == 0.0f) fail_counter = 0.5f;
+                    {
+                        gameovermsg = ObjModule.texts.getText("msg_laserfail");
+                        state = GameState.Fail;
+                    }
                 }
                 mana -= balance.LaserCostInSec * dt;
                 if (mana <= 0)
@@ -438,16 +442,6 @@ namespace LunaDenyCakesGame
             {
                 gameovermsg = ObjModule.texts.getText("msg_cakeover");
                 state = GameState.Win;
-            }
-
-            if (fail_counter > 0.0f)
-            {
-                fail_counter -= dt;
-                if (fail_counter <= 0.0f)
-                {
-                    gameovermsg = ObjModule.texts.getText("msg_laserfail");
-                    state = GameState.Fail;
-                }
             }
 
             if (getCelestiaHPin100()<=0)

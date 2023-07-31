@@ -4,6 +4,7 @@ using SFML.System;
 using SFML.Window;
 using SFML.Audio;
 using SfmlNetEngine;
+using System;
 
 namespace LunaDenyCakesGame
 {
@@ -47,6 +48,13 @@ namespace LunaDenyCakesGame
         private int tekaction;
         private const int INDICATOR_W = 48;
         private List<Effect> effects;
+        private float celestia_effect_x;
+        private float celestia_effect_y;
+        private float celestia_effect_vy;
+        private float celestia_effect_vx;
+        private bool is_celestia_effect;
+        private bool is_celestia_effect_eaten;
+        private bool is_celestia_effect_mirror;
         private Color manacolor = new Color(35, 20, 250);
         private Color hpcolor = new Color(240, 240, 240);
 
@@ -114,6 +122,8 @@ namespace LunaDenyCakesGame
             iscelestiawalk = false;
             islaseron = false;
             oldcelestiazoneidx = game.getCelestiaZoneIdx();
+
+            is_celestia_effect = false;
 
             // Добавить пул звуков для управления
             snd_galop.Volume = ObjModule.opt.isSoundOn() ? 100.0f : 0.0f;
@@ -203,12 +213,41 @@ namespace LunaDenyCakesGame
             laser.Update(dt);
             shield.Update(dt);
 
-            game.Update(dt);
+            if ((!game.isFail())&&(!game.isWin())) game.Update(dt);
 
             if (game.isFail())
             {
-                setNextScene(new SceneGameOver(false,game.getGameOverMsg()));
-                return SceneResult.Switch;
+                if (!is_celestia_effect)
+                {
+                    // Здесь должны быть созданы эффекты самой игрой
+                    if (game.getCelestiaHPin100() <= 0)
+                    {
+                        celestia_effect_vx = 0;
+                        celestia_effect_vy = 0;
+                        is_celestia_effect_eaten = true;
+                    }
+                    else
+                    {
+                        celestia_effect_vx = 100 * Math.Sign(game.getCelestiaPos().X - game.getLunaPos().X);
+                        celestia_effect_vy = -100;
+                        is_celestia_effect_eaten = false;
+                    }
+                    celestia_effect_x = game.getCelestiaPos().X;
+                    celestia_effect_y = game.getCelestiaPos().Y - 128;
+                    is_celestia_effect_mirror = game.getCelestiaDir() == Direction.Left;
+                    is_celestia_effect = true;
+                }
+                else
+                {
+                    celestia_effect_y += celestia_effect_vy * dt;
+                    celestia_effect_x += celestia_effect_vx * dt;
+                    celestia_effect_vy += 800 * dt;
+                    if (celestia_effect_y>ObjModule.opt.getWindowHeigth()+100)
+                    {
+                        setNextScene(new SceneGameOver(false,game.getGameOverMsg()));
+                        return SceneResult.Switch;
+                    }
+                }
             }
             if (game.isWin())
             {
@@ -247,6 +286,7 @@ namespace LunaDenyCakesGame
             for (int i = 0; i < game.getChickenCount(); i++)
                 DrawMirrHorzAt(window, chicken, game.getChickenPos(i).X,game.getChickenPos(i).Y - 30, game.getChickenDir(i)==Direction.Left);
 
+            if (!game.isFail())
             DrawMirrHorzAt(window, game.isCelestiaEaten()?celestia_eat:celestia_walk, 
                     game.getCelestiaPos().X,game.getCelestiaPos().Y-128, game.getCelestiaDir() == Direction.Left);
 
@@ -288,6 +328,12 @@ namespace LunaDenyCakesGame
             {
                 chickenfallen.Rotation = effect.angle;
                 DrawMirrHorzAt(window, chickenfallen, effect.x, effect.y - 30,effect.vx<0);
+            }
+
+            if (is_celestia_effect)
+            {
+                DrawMirrHorzAt(window, is_celestia_effect_eaten ? celestia_eat : celestia_walk,
+                   celestia_effect_x, celestia_effect_y, is_celestia_effect_mirror);
             }
 
             text.FillColor = manacolor;
