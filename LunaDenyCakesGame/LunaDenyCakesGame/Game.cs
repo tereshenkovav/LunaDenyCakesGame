@@ -62,7 +62,8 @@ namespace LunaDenyCakesGame
         private String gameovermsg;
         public Balance balance;
         public float mana;
-        private Cake eaten;        
+        private Cake eaten;
+        private EventTimer wintimer;
         // Заменить на наблюдателя или глобальный объект создания эффектов
         public CreateFallenChicken procFallenChicken = null;
 
@@ -106,6 +107,7 @@ namespace LunaDenyCakesGame
             celestiadir = Direction.No;
             eaten = null;
             celestiahp = balance.CelestiaStartHP;
+            wintimer = new EventTimer();
         }
         public int getMana()
         {
@@ -440,9 +442,13 @@ namespace LunaDenyCakesGame
 
             if (cakes.Count == 0)
             {
-                gameovermsg = ObjModule.texts.getText("msg_cakeover");
-                state = GameState.Win;
+                if (!wintimer.isActive()) wintimer.Start(2.0f, new Action( ()=> {
+                    gameovermsg = ObjModule.texts.getText("msg_cakeover");
+                    state = GameState.Win;
+                }));
             }
+
+            wintimer.Update(dt);
 
             if (getCelestiaHPin100()<=0)
             {

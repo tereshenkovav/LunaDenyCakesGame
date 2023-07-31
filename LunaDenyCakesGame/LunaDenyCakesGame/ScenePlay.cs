@@ -191,7 +191,7 @@ namespace LunaDenyCakesGame
             if ((!newlunawalk) && (islunawalk)) snd_galop.Stop();
             islunawalk = newlunawalk;
 
-            bool newcelestiawalk = !game.isCelestiaEaten();
+            bool newcelestiawalk = (!game.isCelestiaEaten()) && (game.getCelestiaDir()!=Direction.No);
             if ((newcelestiawalk) && (!iscelestiawalk)) snd_galop2.Play();
             if ((!newcelestiawalk) && (iscelestiawalk)) snd_galop2.Stop();
             iscelestiawalk = newcelestiawalk;
@@ -287,8 +287,11 @@ namespace LunaDenyCakesGame
                 DrawMirrHorzAt(window, chicken, game.getChickenPos(i).X,game.getChickenPos(i).Y - 30, game.getChickenDir(i)==Direction.Left);
 
             if (!game.isFail())
-            DrawMirrHorzAt(window, game.isCelestiaEaten()?celestia_eat:celestia_walk, 
-                    game.getCelestiaPos().X,game.getCelestiaPos().Y-128, game.getCelestiaDir() == Direction.Left);
+            {
+                var celestia_sprite = (game.isCelestiaEaten() || (game.getCelestiaDir() == Direction.No)) ? celestia_eat : celestia_walk;
+                DrawMirrHorzAt(window, celestia_sprite,
+                        game.getCelestiaPos().X, game.getCelestiaPos().Y - 128, game.getCelestiaDir() == Direction.Left);
+            }
 
             DrawMirrHorzAt(window, islunawalk ? luna_walk : luna_wait,
                     game.getLunaPos().X, game.getLunaPos().Y - 126,game.getLunaDir()==Direction.Left);
