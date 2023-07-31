@@ -21,7 +21,7 @@ namespace LunaDenyCakesGame
             text = new Text("", CommonData.font, 22);
             items = new List<string>();
             rebuildItems();
-            if (CommonData.music_main.Status != SoundStatus.Playing) CommonData.music_main.Play();
+            if ((CommonData.music_main.Status != SoundStatus.Playing) && ObjModule.opt.isMusicOn()) CommonData.music_main.Play();
         }
 
         private void rebuildItems()

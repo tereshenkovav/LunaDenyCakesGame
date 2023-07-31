@@ -1,11 +1,25 @@
 ﻿using System;
+using System.IO;
+using System.Text.Json;
+using System.Collections.Generic;
 
 namespace SfmlNetEngine
 {
     public enum Difficult { Easy, Medi, Hard };
 
+    public class OptionsParams
+    {
+        public bool soundon { get; set; }
+        public bool musicon { get; set; }
+        public bool fullscreen { get; set; }
+        public int difficult { get; set; }
+        public List<KeyInfo> keys { get; set; }
+    }
+
     public class Options
     {
+        private String configfile;
+
         private int window_w = 800;
         private int window_h = 600;
         private bool soundon = true;
@@ -38,7 +52,8 @@ namespace SfmlNetEngine
         }
         public void invertMusicOn()
         {
-            musicon = !musicon;            
+            musicon = !musicon;
+            SaveParam();
         }
         public bool isMusicOn()
         {
@@ -46,7 +61,8 @@ namespace SfmlNetEngine
         }
         public void invertFullScreen()
         {
-            fullscreen = !fullscreen;            
+            fullscreen = !fullscreen;
+            SaveParam();
         }
         public bool isFullScreen()
         {
@@ -70,12 +86,31 @@ namespace SfmlNetEngine
             if (difficult == Difficult.Easy) difficult = Difficult.Medi; else
             if (difficult == Difficult.Medi) difficult = Difficult.Hard; else
             if (difficult == Difficult.Hard) difficult = Difficult.Easy;
+            SaveParam();
         }
-        public void LoadParams()
-        {            
+        public void LoadParams(String filename)
+        {
+            configfile = filename;
+            if (File.Exists(filename))
+            {
+                var obj = JsonSerializer.Deserialize<OptionsParams>(File.ReadAllText(filename));
+                soundon = obj.soundon;
+                musicon = obj.musicon;
+                fullscreen = obj.fullscreen;
+                difficult = (Difficult)obj.difficult;
+                keyconfig.setAllKeys(obj.keys);
+            }
         }
         public void SaveParam()
-        {            
-        }        
+        {
+            var obj = new OptionsParams() { 
+                soundon = soundon,
+                musicon = musicon,
+                fullscreen = fullscreen,
+                difficult = (int)difficult,
+                keys = keyconfig.getAllKeys()
+            };
+            File.WriteAllText(configfile, JsonSerializer.Serialize(obj,new JsonSerializerOptions() { WriteIndented = true }));
+        }
     }
 }

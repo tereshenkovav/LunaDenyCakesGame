@@ -54,6 +54,7 @@ namespace LunaDenyCakesGame
         public override void UnInit()
         {
             // Запись изменений клавиш выполняется здесь
+            ObjModule.opt.SaveParam();
         }
         
         public override SceneResult Frame(float dt, IEnumerable<EventArgsEx> events)

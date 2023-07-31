@@ -1,6 +1,7 @@
 ﻿using SfmlNetEngine;
 using System.IO;
 using System.Diagnostics;
+using System;
 using SFML.Window;
 
 namespace LunaDenyCakesGame
@@ -16,7 +17,11 @@ namespace LunaDenyCakesGame
             else
                 Directory.SetCurrentDirectory(args[0]);
 
-            CommonData.Load();
+            String localdir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
+                Path.DirectorySeparatorChar + "LunaDenyCakesGame";
+            if (!Directory.Exists(localdir)) Directory.CreateDirectory(localdir);
+
+            CommonData.Load();            
             ObjModule.opt.setWindowParams(1024, 768);
             ObjModule.opt.keyconfig.addKey(CommonData.action_switch, Mouse.Button.Right);
             ObjModule.opt.keyconfig.addKey(CommonData.action_apply, Mouse.Button.Left);
@@ -26,7 +31,7 @@ namespace LunaDenyCakesGame
             ObjModule.opt.keyconfig.addKey(CommonData.action_sel_shield, Keyboard.Key.Num4);
             ObjModule.opt.keyconfig.addKey(CommonData.action_left, Keyboard.Key.A);
             ObjModule.opt.keyconfig.addKey(CommonData.action_right, Keyboard.Key.D);
-            ObjModule.opt.LoadParams();
+            ObjModule.opt.LoadParams(localdir+ Path.DirectorySeparatorChar + "options.json");
             ObjModule.texts.loadFromFile("strings.ru.json");
 
             var window = new SfmlNetEngine.Window();

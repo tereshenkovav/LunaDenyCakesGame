@@ -6,12 +6,12 @@ namespace SfmlNetEngine
 {
     public class KeyInfo
     {
-        public string ActionName;
-        public Mouse.Button mousebutton;
-        public Keyboard.Key keyboardkey;
-        public bool ismouse;
+        public string ActionName { get; set; }
+        public Mouse.Button mousebutton { get; set; }
+        public Keyboard.Key keyboardkey { get; set; }
+        public bool ismouse { get; set; }
         // Здесь можно заменить на нулевой объект, который всегда isMatch=false и view=???
-        public bool isset;
+        public bool isset { get; set; }
         public KeyInfo Clone()
         {
             return (KeyInfo)this.MemberwiseClone();            
@@ -207,6 +207,17 @@ namespace SfmlNetEngine
             var key = new KeyInfo() { ActionName = actionname, ismouse = true, isset = true,  mousebutton = Amousebutton };
             keys.Add(key);
             keys_default.Add(key.Clone());
+        }
+        public List<KeyInfo> getAllKeys()
+        {
+            return keys;
+        }
+        public void setAllKeys(List<KeyInfo> list)
+        {
+            foreach (var key in list) {
+                var index = keys.FindIndex((k) => k.ActionName == key.ActionName);
+                if (index != -1) keys[index] = key.Clone();
+            }
         }
         public int getCount()
         {
