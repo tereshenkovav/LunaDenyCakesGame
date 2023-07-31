@@ -20,7 +20,7 @@ namespace LunaDenyCakesGame
                 
         public override void Init()
         {
-            text = new Text("", CommonData.font, 28);
+            text = new Text("", CommonData.font, 22);
             text_main = new Text("", CommonData.font, 24);
             text_main.FillColor = new Color(255, 255, 255);
             help = File.ReadAllText(@"help.ru.txt");
@@ -44,10 +44,10 @@ namespace LunaDenyCakesGame
             int mx = getMousePosition().X;
             int my = getMousePosition().Y;
 
-            return ((ObjModule.opt.getWindowWidth() / 2 - CommonData.button.Texture.Size.X / 2 < mx) &&
-                    (TOP + STEP * i - CommonData.button.Texture.Size.Y / 2 < my) &&
-                    (ObjModule.opt.getWindowWidth() / 2 + CommonData.button.Texture.Size.X / 2 > mx) &&
-                    (TOP + STEP * i + CommonData.button.Texture.Size.Y / 2 > my));
+            return ((ObjModule.opt.getWindowWidth() / 2 - CommonData.button_small.Texture.Size.X / 2 < mx) &&
+                    (TOP + STEP * i - CommonData.button_small.Texture.Size.Y / 2 < my) &&
+                    (ObjModule.opt.getWindowWidth() / 2 + CommonData.button_small.Texture.Size.X / 2 > mx) &&
+                    (TOP + STEP * i + CommonData.button_small.Texture.Size.Y / 2 > my));
         }
 
         public override void UnInit()
@@ -108,11 +108,11 @@ namespace LunaDenyCakesGame
             {
                 // Выделение яркостью
                 if (isMousePosOverButton(i))
-                    CommonData.button.Color = CommonData.color_over;
+                    CommonData.button_small.Color = CommonData.color_over;
                 else
-                    CommonData.button.Color = CommonData.color_norm;                
-                DrawAt(window, CommonData.button, ObjModule.opt.getWindowWidth() / 2, TOP + STEP * i);
-                DrawTextCentered(window, text, items[i], ObjModule.opt.getWindowWidth() / 2, TOP + STEP * i - 24);
+                    CommonData.button_small.Color = CommonData.color_norm;                
+                DrawAt(window, CommonData.button_small, ObjModule.opt.getWindowWidth() / 2, TOP + STEP * i);
+                DrawTextCentered(window, text, items[i], ObjModule.opt.getWindowWidth() / 2, TOP + STEP * i - 20);
             }
                         
             // Курсор

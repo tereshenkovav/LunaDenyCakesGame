@@ -39,11 +39,11 @@ namespace SfmlNetEngine
             if (!isset) return "???";
             if (ismouse)
             {
-                if (mousebutton == Mouse.Button.Left) return "LCM";
+                if (mousebutton == Mouse.Button.Left) return ObjModule.texts.getText("text_lcm");
                 else
-                if (mousebutton == Mouse.Button.Middle) return "MCM";
+                if (mousebutton == Mouse.Button.Middle) return ObjModule.texts.getText("text_mcm");
                 else
-                if (mousebutton == Mouse.Button.Right) return "RCM";
+                if (mousebutton == Mouse.Button.Right) return ObjModule.texts.getText("text_rcm");
                 else
                     return "???";
             }

@@ -11,8 +11,8 @@ namespace LunaDenyCakesGame
     {
         // Ресурсы и константы
         private Text text;        
-        private int TOP = 190;
-        private int STEP = 64;
+        private int TOP = 250;
+        private int STEP = 54;
         private int BUTBACK_X;
         private int BUTDEF_X;
         private int BUT_Y = 730;

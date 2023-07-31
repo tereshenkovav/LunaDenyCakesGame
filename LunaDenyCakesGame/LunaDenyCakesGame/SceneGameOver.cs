@@ -14,13 +14,13 @@ namespace LunaDenyCakesGame
         private Text text_main;
         protected List<string> items;
         private int TOP = 300;
-        private int STEP = 70;        
+        private int STEP = 54;
         private bool iswin;
         private String msg;
         
         public override void Init()
         {
-            text = new Text("", CommonData.font, 28);
+            text = new Text("", CommonData.font, 22);
             text_main = new Text("", CommonData.font, 36);
             text_main.FillColor = iswin ? new Color(70, 160, 0): new Color(200, 0, 0);
             items = new List<string>();
@@ -46,10 +46,10 @@ namespace LunaDenyCakesGame
             int mx = getMousePosition().X;
             int my = getMousePosition().Y;
 
-            return ((ObjModule.opt.getWindowWidth() / 2 - CommonData.button.Texture.Size.X / 2 < mx) &&
-                    (TOP + STEP * i - CommonData.button.Texture.Size.Y / 2 < my) &&
-                    (ObjModule.opt.getWindowWidth() / 2 + CommonData.button.Texture.Size.X / 2 > mx) &&
-                    (TOP + STEP * i + CommonData.button.Texture.Size.Y / 2 > my));
+            return ((ObjModule.opt.getWindowWidth() / 2 - CommonData.button_small.Texture.Size.X / 2 < mx) &&
+                    (TOP + STEP * i - CommonData.button_small.Texture.Size.Y / 2 < my) &&
+                    (ObjModule.opt.getWindowWidth() / 2 + CommonData.button_small.Texture.Size.X / 2 > mx) &&
+                    (TOP + STEP * i + CommonData.button_small.Texture.Size.Y / 2 > my));
         }
 
         public override void UnInit()
@@ -101,11 +101,11 @@ namespace LunaDenyCakesGame
             {
                 // Выделение яркостью
                 if (isMousePosOverButton(i))
-                    CommonData.button.Color = CommonData.color_over;
+                    CommonData.button_small.Color = CommonData.color_over;
                 else
-                    CommonData.button.Color = CommonData.color_norm;                
-                DrawAt(window, CommonData.button, ObjModule.opt.getWindowWidth() / 2, TOP + STEP * i);
-                DrawTextCentered(window, text, items[i], ObjModule.opt.getWindowWidth() / 2, TOP + STEP * i - 24);
+                    CommonData.button_small.Color = CommonData.color_norm;                
+                DrawAt(window, CommonData.button_small, ObjModule.opt.getWindowWidth() / 2, TOP + STEP * i);
+                DrawTextCentered(window, text, items[i], ObjModule.opt.getWindowWidth() / 2, TOP + STEP * i - 20);
             }
                         
             // Курсор

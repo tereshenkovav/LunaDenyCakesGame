@@ -14,11 +14,11 @@ namespace LunaDenyCakesGame
         private Text text;
         protected List<string> items;
         private int TOP = 250;
-        private int STEP = 64;
+        private int STEP = 54;
         
         public override void Init()
         {
-            text = new Text("", CommonData.font, 28);
+            text = new Text("", CommonData.font, 22);
             items = new List<string>();
             rebuildItems();
             if (CommonData.music_main.Status != SoundStatus.Playing) CommonData.music_main.Play();
@@ -131,7 +131,7 @@ namespace LunaDenyCakesGame
                 else
                     CommonData.button.Color = CommonData.color_norm;                
                 DrawAt(window, CommonData.button, ObjModule.opt.getWindowWidth() / 2, TOP + STEP * i);
-                DrawTextCentered(window, text, items[i], ObjModule.opt.getWindowWidth() / 2, TOP + STEP * i - 24);
+                DrawTextCentered(window, text, items[i], ObjModule.opt.getWindowWidth() / 2, TOP + STEP * i - 20);
             }
 
             DrawAt(window, CommonData.logo, ObjModule.opt.getWindowWidth() / 2, 100);
