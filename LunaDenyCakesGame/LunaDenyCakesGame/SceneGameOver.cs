@@ -12,9 +12,9 @@ namespace LunaDenyCakesGame
         // Ресурсы и константы
         private Text text;
         private Text text_main;
-        protected List<string> items;
-        private int TOP = 300;
-        private int STEP = 54;
+        private int BUTRESTART_X;
+        private int BUTMENU_X;
+        private int BUT_Y = 730;
         private bool iswin;
         private String msg;
         
@@ -22,9 +22,9 @@ namespace LunaDenyCakesGame
         {
             text = new Text("", CommonData.font, 22);
             text_main = new Text("", CommonData.font, 36);
-            text_main.FillColor = iswin ? new Color(70, 160, 0): new Color(200, 0, 0);
-            items = new List<string>();
-            rebuildItems();
+            text_main.FillColor = iswin ? new Color(70, 255, 0): new Color(255, 0, 0);
+            BUTRESTART_X = ObjModule.opt.getWindowWidth() / 2 - 384 / 2 + 188 / 2;
+            BUTMENU_X = ObjModule.opt.getWindowWidth() / 2 + 384 / 2 - 188 / 2;
         }
 
         public SceneGameOver(bool iswin, String msg)
@@ -33,25 +33,18 @@ namespace LunaDenyCakesGame
             this.msg = msg;
         }
 
-        private void rebuildItems()
-        {
-            items.Clear();
-            items.Add(ObjModule.texts.getText("menurestart"));
-            items.Add(ObjModule.texts.getText("menuexit"));
-        }
-
         // Проверка, входит ли курсор в позицию меню
-        private bool isMousePosOverButton(int i)
+        private bool isMousePosOverSmallButton(int x, int y)
         {
             int mx = getMousePosition().X;
             int my = getMousePosition().Y;
 
-            return ((ObjModule.opt.getWindowWidth() / 2 - CommonData.button_small.Texture.Size.X / 2 < mx) &&
-                    (TOP + STEP * i - CommonData.button_small.Texture.Size.Y / 2 < my) &&
-                    (ObjModule.opt.getWindowWidth() / 2 + CommonData.button_small.Texture.Size.X / 2 > mx) &&
-                    (TOP + STEP * i + CommonData.button_small.Texture.Size.Y / 2 > my));
+            return ((x - CommonData.button_small.Texture.Size.X / 2 < mx) &&
+                    (y - CommonData.button_small.Texture.Size.Y / 2 < my) &&
+                    (x + CommonData.button_small.Texture.Size.X / 2 > mx) &&
+                    (y + CommonData.button_small.Texture.Size.Y / 2 > my));
         }
-
+        
         public override void UnInit()
         {
             
@@ -66,48 +59,68 @@ namespace LunaDenyCakesGame
 
                 if (args.e is KeyEventArgs keyEventArg)
                 {
-                    if (keyEventArg.Code == Keyboard.Key.Escape) return SceneResult.Exit;
+                    if (keyEventArg.Code == Keyboard.Key.Escape)
+                    {
+                        setNextScene(new SceneMenu());
+                        return SceneResult.Switch;
+                    }
                 }
 
                 if (args.e is MouseButtonEventArgs mouseButtonEventArgs)
                 {
                     if (mouseButtonEventArgs.Button == Mouse.Button.Left)
                     {
-                        if (isMousePosOverButton(0))
+                        if (isMousePosOverSmallButton(BUTRESTART_X, BUT_Y))
                         {
                             setNextScene(new ScenePlay());
                             return SceneResult.Switch;
-                        }                        
-                        if (isMousePosOverButton(1)) return SceneResult.Exit;
-                    }                                
+                        }
+                        if (isMousePosOverSmallButton(BUTMENU_X, BUT_Y))
+                        {
+                            setNextScene(new SceneMenu());
+                            return SceneResult.Switch;
+                        }
+                    }
                 }
             }
             return SceneResult.Normal;
-
         }
 
         public override void Render(RenderWindow window)
         {
             DrawAt(window, CommonData.back, 0,0);
 
+            using (RectangleShape rect = new RectangleShape())
+            {
+                rect.Origin = new Vector2f(0, 0);
+                rect.OutlineThickness = 0;
+                rect.Size = new Vector2f(ObjModule.opt.getWindowWidth() - 400, 300);
+                rect.Position = new Vector2f(200, 100);
+                rect.FillColor = new Color(40, 40, 40, 128);
+                window.Draw(rect);
+            }
+
             DrawTextCentered(window, text_main,
                 iswin ? ObjModule.texts.getText("text_win") : ObjModule.texts.getText("text_fail"),
-                ObjModule.opt.getWindowWidth() / 2, 100);
+                ObjModule.opt.getWindowWidth() / 2, 150);
 
-            DrawTextCentered(window, text_main, msg, ObjModule.opt.getWindowWidth() / 2, 150);
+            DrawTextCentered(window, text_main, msg, ObjModule.opt.getWindowWidth() / 2, 200);
 
             // Рендер пунктов меню
-            for (int i = 0; i < items.Count; i++)
-            {
-                // Выделение яркостью
-                if (isMousePosOverButton(i))
-                    CommonData.button_small.Color = CommonData.color_over;
-                else
-                    CommonData.button_small.Color = CommonData.color_norm;                
-                DrawAt(window, CommonData.button_small, ObjModule.opt.getWindowWidth() / 2, TOP + STEP * i);
-                DrawTextCentered(window, text, items[i], ObjModule.opt.getWindowWidth() / 2, TOP + STEP * i - 20);
-            }
-                        
+            if (isMousePosOverSmallButton(BUTRESTART_X, BUT_Y))
+                CommonData.button_small.Color = CommonData.color_over;
+            else
+                CommonData.button_small.Color = CommonData.color_norm;
+            DrawAt(window, CommonData.button_small, BUTRESTART_X, BUT_Y);
+            DrawTextCentered(window, text, ObjModule.texts.getText("menurestart"), BUTRESTART_X, BUT_Y - 16);
+
+            if (isMousePosOverSmallButton(BUTMENU_X, BUT_Y))
+                CommonData.button_small.Color = CommonData.color_over;
+            else
+                CommonData.button_small.Color = CommonData.color_norm;
+            DrawAt(window, CommonData.button_small, BUTMENU_X, BUT_Y);
+            DrawTextCentered(window, text, ObjModule.texts.getText("menumenu"), BUTMENU_X, BUT_Y - 16);
+
             // Курсор
             DrawAt(window, CommonData.cursor, (Vector2f)getMousePosition());
         }
