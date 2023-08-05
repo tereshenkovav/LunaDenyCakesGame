@@ -125,6 +125,8 @@ namespace LunaDenyCakesGame
 
             is_celestia_effect = false;
 
+            ObjModule.achievementstore.ResetDetector();
+
             // Добавить пул звуков для управления
             snd_galop.Volume = ObjModule.opt.isSoundOn() ? 100.0f : 0.0f;
             snd_galop2.Volume = ObjModule.opt.isSoundOn() ? 100.0f : 0.0f;
@@ -213,7 +215,12 @@ namespace LunaDenyCakesGame
             laser.Update(dt);
             shield.Update(dt);
 
-            if ((!game.isFail())&&(!game.isWin())) game.Update(dt);
+            if ((!game.isFail()) && (!game.isWin()))
+            {
+                game.Update(dt);
+                // Обязательно сразу после обновления игры
+                ObjModule.achievementstore.Update(game);
+            }
 
             if (game.isFail())
             {

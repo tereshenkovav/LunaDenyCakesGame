@@ -29,6 +29,7 @@ namespace LunaDenyCakesGame
             items.Clear();
             items.Add(ObjModule.texts.getText("menustart"));
             items.Add(ObjModule.texts.getText("menudiff")+" : "+ObjModule.texts.getText("text_"+ObjModule.opt.getDifficultCode()));
+            items.Add(ObjModule.texts.getText("menuachievements"));
             items.Add(ObjModule.texts.getText("menuhelp"));
             items.Add(ObjModule.texts.getText("menuctrl"));
             items.Add(ObjModule.texts.getText("menusound") + " : " + 
@@ -85,31 +86,36 @@ namespace LunaDenyCakesGame
                         }
                         if (isMousePosOverButton(2))
                         {
-                            setNextScene(new SceneHelp());
+                            setNextScene(new SceneAchievements());
                             return SceneResult.Switch;
                         }
                         if (isMousePosOverButton(3))
                         {
-                            setNextScene(new SceneCtrl());
+                            setNextScene(new SceneHelp());
                             return SceneResult.Switch;
                         }
                         if (isMousePosOverButton(4))
                         {
+                            setNextScene(new SceneCtrl());
+                            return SceneResult.Switch;
+                        }
+                        if (isMousePosOverButton(5))
+                        {
                             ObjModule.opt.invertSoundOn();
                             rebuildItems();
                         }
-                        if (isMousePosOverButton(5))
+                        if (isMousePosOverButton(6))
                         {
                             ObjModule.opt.invertMusicOn();
                             CommonData.music_main.Volume = ObjModule.opt.isMusicOn() ? 100.0f : 0.0f;
                             rebuildItems();
                         }
-                        if (isMousePosOverButton(6))
+                        if (isMousePosOverButton(7))
                         {
                             ObjModule.opt.invertFullScreen();
                             return SceneResult.RebuildWindow;
                         }
-                        if (isMousePosOverButton(7)) return SceneResult.Exit;
+                        if (isMousePosOverButton(8)) return SceneResult.Exit;
                     }
                                 
                 }

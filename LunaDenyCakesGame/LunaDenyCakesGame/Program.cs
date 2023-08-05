@@ -33,6 +33,14 @@ namespace LunaDenyCakesGame
             ObjModule.opt.keyconfig.addKey(CommonData.action_right, Keyboard.Key.D);
             ObjModule.opt.LoadParams(localdir+ Path.DirectorySeparatorChar + "options.json");
             ObjModule.texts.loadFromFile("strings.ru.json");
+            ObjModule.achievementstore.addAchievement(new AchievementWinEasy());
+            ObjModule.achievementstore.addAchievement(new AchievementWinMedi());
+            ObjModule.achievementstore.addAchievement(new AchievementWinHard());
+            ObjModule.achievementstore.addAchievement(new AchievementWinMediChicken());
+            ObjModule.achievementstore.addAchievement(new AchievementWinMediShield());
+            ObjModule.achievementstore.addAchievement(new AchievementWinMedi50());
+            ObjModule.achievementstore.addAchievement(new AchievementWinEasy75());
+            ObjModule.achievementstore.LoadAchievements(localdir + Path.DirectorySeparatorChar + "achievements.json");
 
             var window = new SfmlNetEngine.Window();
             window.Show(typeof(SceneMenu), typeof(SceneMenu));
