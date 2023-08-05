@@ -15,7 +15,7 @@ XPStyle on
 ReserveFile /plugin InstallOptions.dll
 ReserveFile "runapp.ini"
 
-OutFile "LunaDenyCakesGame-setup-0.5.0-Win64.exe"
+OutFile "LunaDenyCakesGame-setup-1.0.0-Win64.exe"
 
 var is_update
 

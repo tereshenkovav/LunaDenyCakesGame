@@ -38,4 +38,4 @@ cp -r ../../data/* $appdir/usr/bin
 
 export ARCH=x86_64
 
-appimagetool-x86_64.AppImage $appdir /tmp/LunaDenyCakesGame-0.5.0-x86_64.AppImage
+appimagetool-x86_64.AppImage $appdir /tmp/LunaDenyCakesGame-1.0.0-x86_64.AppImage
