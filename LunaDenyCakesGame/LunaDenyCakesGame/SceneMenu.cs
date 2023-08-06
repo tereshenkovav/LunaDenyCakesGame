@@ -4,6 +4,7 @@ using SFML.System;
 using SFML.Window;
 using SFML.Audio;
 using SfmlNetEngine;
+using System;
 
 namespace LunaDenyCakesGame
 {
@@ -29,7 +30,8 @@ namespace LunaDenyCakesGame
             items.Clear();
             items.Add(ObjModule.texts.getText("menustart"));
             items.Add(ObjModule.texts.getText("menudiff")+" : "+ObjModule.texts.getText("text_"+ObjModule.opt.getDifficultCode()));
-            items.Add(ObjModule.texts.getText("menuachievements"));
+            items.Add(ObjModule.texts.getText("menuachievements")+String.Format(" ({0}/{1})",
+                ObjModule.achievementstore.getCompletedCount(),ObjModule.achievementstore.getCount()));
             items.Add(ObjModule.texts.getText("menuhelp"));
             items.Add(ObjModule.texts.getText("menuctrl"));
             items.Add(ObjModule.texts.getText("menusound") + " : " + 

@@ -73,6 +73,14 @@ namespace SfmlNetEngine
         {
             return detectors.Count;
         }
+        public int getCompletedCount()
+        {
+            int r = 0;
+            foreach (var item in detectors)
+                if (completed.ContainsKey(item.getCode()))
+                    if (completed[item.getCode()]) r++;
+            return r;
+        }
         public String getName(int i)
         {
             return ObjModule.texts.getText("achievement_" + detectors[i].getCode());
