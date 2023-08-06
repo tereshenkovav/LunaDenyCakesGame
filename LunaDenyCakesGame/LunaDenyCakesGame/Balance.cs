@@ -25,14 +25,16 @@ namespace LunaDenyCakesGame
                 case Difficult.Easy:
                     EatInSec = 0.10f;
                     RegenManaInSec = 10.0f;
+                    JumpCost = 30;
+                    ChickenCost = 15;
+                    LaserCostInSec = 25.0f;
                     break;
-                case Difficult.Medi:
+                case Difficult.Medi:                    
+                    JumpCost = 30;
+                    ChickenCost = 15;
+                    LaserCostInSec = 25.0f;
                     break;
                 case Difficult.Hard:
-                    ShieldCost = 15;
-                    JumpCost = 50;
-                    ChickenCost = 30;
-                    LaserCostInSec = 40.0f;
                     break;
             }
         }
