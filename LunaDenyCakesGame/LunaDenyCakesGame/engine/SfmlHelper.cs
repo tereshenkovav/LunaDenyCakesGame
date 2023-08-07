@@ -36,7 +36,7 @@ namespace SfmlNetEngine
 
         public static Sprite LoadSprite(String filename, SpriteLoaderOptions options)
         {
-            return createSpriteFromTexture(new Texture(filename), options);
+            return createSpriteFromTexture(new Texture(ObjModule.opt.getFilenameByLanguageIfExist(filename)), options);
         }
         // Загрузка спрайта с увеличением яркости
         public static Sprite LoadSpriteBright(String filename, float upbright)
@@ -51,7 +51,7 @@ namespace SfmlNetEngine
         }
         public static Sprite LoadSpriteBright(String filename, float upbright, SpriteLoaderOptions options)
         {
-            var img = new Image(filename);
+            var img = new Image(ObjModule.opt.getFilenameByLanguageIfExist(filename));
             for (uint i = 0; i < img.Size.X; i++)
                 for (uint j = 0; j < img.Size.Y; j++)
                 {

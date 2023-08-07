@@ -23,7 +23,7 @@ namespace LunaDenyCakesGame
             text = new Text("", CommonData.font, 22);
             text_main = new Text("", CommonData.font, 24);
             text_main.FillColor = new Color(255, 255, 255);
-            help = File.ReadAllText(@"help.ru.txt");
+            help = File.ReadAllText(ObjModule.opt.getFilenameByLanguageIfExist(@"help.txt"));
 
             text_main.DisplayedString = help;
             text_main.Position = new Vector2f(30, 100);

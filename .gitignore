@@ -401,3 +401,4 @@ build-*
 setup/windows/*.zip
 setup/windows/*.exe
 setup/linux/*.zip
+data/deflang

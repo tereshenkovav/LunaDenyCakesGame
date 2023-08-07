@@ -13,8 +13,9 @@ namespace LunaDenyCakesGame
     {
         // Ресурсы и константы
         private Text text;
+        private Sprite lang;
         protected List<string> items;
-        private int TOP = 250;
+        private int TOP = 240;
         private int STEP = 54;
         
         public override void Init()
@@ -22,6 +23,7 @@ namespace LunaDenyCakesGame
             text = new Text("", CommonData.font, 22);
             items = new List<string>();
             rebuildItems();
+            lang = SfmlHelper.LoadSprite(@"images/lang.png");
             if ((CommonData.music_main.Status != SoundStatus.Playing) && ObjModule.opt.isMusicOn()) CommonData.music_main.Play();
         }
 
@@ -34,6 +36,7 @@ namespace LunaDenyCakesGame
                 ObjModule.achievementstore.getCompletedCount(),ObjModule.achievementstore.getCount()));
             items.Add(ObjModule.texts.getText("menuhelp"));
             items.Add(ObjModule.texts.getText("menuctrl"));
+            items.Add(ObjModule.texts.getText("menulang")+" : "+ObjModule.opt.getCurrentLanguage().ToUpper());
             items.Add(ObjModule.texts.getText("menusound") + " : " + 
                 ObjModule.texts.getText(ObjModule.opt.isSoundOn()? "text_on":"text_off"));
             items.Add(ObjModule.texts.getText("menumusic") + " : " +
@@ -103,21 +106,29 @@ namespace LunaDenyCakesGame
                         }
                         if (isMousePosOverButton(5))
                         {
-                            ObjModule.opt.invertSoundOn();
+                            ObjModule.opt.switchCurrentLanguage();
+                            lang = SfmlHelper.LoadSprite(@"images/lang.png");
+                            CommonData.logo = SfmlHelper.LoadSprite(@"images/logo.png", SpriteLoaderOptions.sloCentered);
+                            ObjModule.texts.loadFromFile("strings.json");
                             rebuildItems();
                         }
                         if (isMousePosOverButton(6))
+                        {
+                            ObjModule.opt.invertSoundOn();
+                            rebuildItems();
+                        }
+                        if (isMousePosOverButton(7))
                         {
                             ObjModule.opt.invertMusicOn();
                             CommonData.music_main.Volume = ObjModule.opt.isMusicOn() ? 100.0f : 0.0f;
                             rebuildItems();
                         }
-                        if (isMousePosOverButton(7))
+                        if (isMousePosOverButton(8))
                         {
                             ObjModule.opt.invertFullScreen();
                             return SceneResult.RebuildWindow;
                         }
-                        if (isMousePosOverButton(8)) return SceneResult.Exit;
+                        if (isMousePosOverButton(9)) return SceneResult.Exit;
                     }
                                 
                 }
@@ -141,6 +152,8 @@ namespace LunaDenyCakesGame
                 DrawAt(window, CommonData.button, ObjModule.opt.getWindowWidth() / 2, TOP + STEP * i);
                 DrawTextCentered(window, text, items[i], ObjModule.opt.getWindowWidth() / 2, TOP + STEP * i - 20);
             }
+
+            DrawAt(window, lang, ObjModule.opt.getWindowWidth() / 2 + GetTextWidth(text, items[5]) / 2 + 10, TOP + STEP * 5 - 14);
 
             DrawAt(window, CommonData.logo, ObjModule.opt.getWindowWidth() / 2, 100);
 

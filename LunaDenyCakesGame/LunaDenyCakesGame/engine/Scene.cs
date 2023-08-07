@@ -94,6 +94,12 @@ namespace SfmlNetEngine
             window.Draw(text);
         }
 
+        public float GetTextWidth(Text text, String data)
+        {
+            text.DisplayedString = data;
+            return text.GetLocalBounds().Width;
+        }
+
         public void DrawText(RenderWindow window, Text text, String data, int x, int y)
         {
             text.DisplayedString = data;

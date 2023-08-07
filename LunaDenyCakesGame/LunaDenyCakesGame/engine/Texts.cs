@@ -15,7 +15,8 @@ namespace SfmlNetEngine
         }
         public void loadFromFile(String filename)
         {
-            texts = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(filename));
+            String langfile = ObjModule.opt.getFilenameByLanguageIfExist(filename);
+            texts = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(langfile));
         }
         public String getText(string key)
         {

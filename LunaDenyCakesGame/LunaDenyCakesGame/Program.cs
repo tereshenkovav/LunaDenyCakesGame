@@ -3,6 +3,8 @@ using System.IO;
 using System.Diagnostics;
 using System;
 using SFML.Window;
+using System.Text.Json;
+using System.Collections.Generic;
 
 namespace LunaDenyCakesGame
 {
@@ -21,7 +23,6 @@ namespace LunaDenyCakesGame
                 Path.DirectorySeparatorChar + "LunaDenyCakesGame";
             if (!Directory.Exists(localdir)) Directory.CreateDirectory(localdir);
 
-            CommonData.Load();            
             ObjModule.opt.setWindowParams(1024, 768);
             ObjModule.opt.keyconfig.addKey(CommonData.action_switch, Mouse.Button.Right);
             ObjModule.opt.keyconfig.addKey(CommonData.action_apply, Mouse.Button.Left);
@@ -31,8 +32,11 @@ namespace LunaDenyCakesGame
             ObjModule.opt.keyconfig.addKey(CommonData.action_sel_shield, Keyboard.Key.Num4);
             ObjModule.opt.keyconfig.addKey(CommonData.action_left, Keyboard.Key.A);
             ObjModule.opt.keyconfig.addKey(CommonData.action_right, Keyboard.Key.D);
+            ObjModule.opt.setUsedLanguages(JsonSerializer.Deserialize<List<String>>(File.ReadAllText("languages.json")));
+            if (File.Exists("deflang")) ObjModule.opt.setCurrentLanguage(File.ReadAllText("deflang").Trim());
             ObjModule.opt.LoadParams(localdir+ Path.DirectorySeparatorChar + "options.json");
-            ObjModule.texts.loadFromFile("strings.ru.json");
+            ObjModule.texts.loadFromFile("strings.json");
+            CommonData.Load();
             ObjModule.achievementstore.addAchievement(new AchievementWinEasy());
             ObjModule.achievementstore.addAchievement(new AchievementWinMedi());
             ObjModule.achievementstore.addAchievement(new AchievementWinHard());
