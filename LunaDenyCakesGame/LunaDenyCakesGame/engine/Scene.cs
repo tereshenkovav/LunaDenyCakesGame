@@ -118,6 +118,7 @@ namespace SfmlNetEngine
                 rect.OutlineThickness = 0;
 
                 int teksize = (int)(w * v);
+                if (teksize < 1) teksize = 1;
                 rect.Size = new Vector2f(teksize, h);
                 rect.Position = new Vector2f(x, y);
 
