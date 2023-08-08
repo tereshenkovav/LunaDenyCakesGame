@@ -146,6 +146,24 @@ namespace LunaDenyCakesGame
             snd_chicken.Stop();
         }
 
+        private void processAction(bool isreleased)
+        {
+            if (isreleased)
+            {
+                if (used_action != null) used_action.Finish();
+            }
+            else
+            {
+                if (actions[tekaction].Apply(getMousePosition()))
+                {
+                    used_action = actions[tekaction];
+                    // Тоже переделать на наблюдателя или коды эффектов
+                    if (actions[tekaction] is GAJump) snd_teleport.Play();
+                    if (actions[tekaction] is GAChicken) snd_chicken.Play();
+                }
+            }
+        }
+
         public override SceneResult Frame(float dt, IEnumerable<EventArgsEx> events)
         {
             string actionname = "";
@@ -162,27 +180,28 @@ namespace LunaDenyCakesGame
 
                 if (ObjModule.opt.keyconfig.isMatchEvent(args.e, ref actionname))
                 {
-                    if ((actionname == CommonData.action_sel_teleport) && (!args.released)) tekaction = 0;
-                    if ((actionname == CommonData.action_sel_laser) && (!args.released)) tekaction = 1;
-                    if ((actionname == CommonData.action_sel_chicken) && (!args.released)) tekaction = 2;
-                    if ((actionname == CommonData.action_sel_shield) && (!args.released)) tekaction = 3;
                     if ((actionname == CommonData.action_switch) && (!args.released)) tekaction = (tekaction + 1) % actions.Count;
-                    if (actionname == CommonData.action_apply)
+
+                    if (CustomOptions.customopt.isApplyAfterSelect())
                     {
-                        if (args.released)
+                        int keyactionidx = -1;
+                        if (actionname == CommonData.action_sel_teleport) keyactionidx = 0;
+                        if (actionname == CommonData.action_sel_laser) keyactionidx = 1;
+                        if (actionname == CommonData.action_sel_chicken) keyactionidx = 2;
+                        if (actionname == CommonData.action_sel_shield) keyactionidx = 3;
+                        if (keyactionidx != -1)
                         {
-                            if (used_action != null) used_action.Finish();
+                            tekaction = keyactionidx;
+                            processAction(args.released);
                         }
-                        else
-                        {
-                            if (actions[tekaction].Apply(getMousePosition()))
-                            {
-                                used_action = actions[tekaction];
-                                // Тоже переделать на наблюдателя или коды эффектов
-                                if (actions[tekaction] is GAJump) snd_teleport.Play();
-                                if (actions[tekaction] is GAChicken) snd_chicken.Play();
-                            }
-                        }
+                    }
+                    else
+                    {
+                        if ((actionname == CommonData.action_sel_teleport) && (!args.released)) tekaction = 0;
+                        if ((actionname == CommonData.action_sel_laser) && (!args.released)) tekaction = 1;
+                        if ((actionname == CommonData.action_sel_chicken) && (!args.released)) tekaction = 2;
+                        if ((actionname == CommonData.action_sel_shield) && (!args.released)) tekaction = 3;
+                        if (actionname == CommonData.action_apply) processAction(args.released);
                     }
                 }
             }

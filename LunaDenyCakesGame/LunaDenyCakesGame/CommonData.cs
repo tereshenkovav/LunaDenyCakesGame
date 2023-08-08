@@ -13,6 +13,8 @@ namespace LunaDenyCakesGame
         public static Sprite button_small;
         public static Sprite logo;
         public static Sprite back;
+        public static Sprite checkbox_on;
+        public static Sprite checkbox_off;
         public static Color color_over;
         public static Color color_norm;
         public static Music music_main;
@@ -34,6 +36,8 @@ namespace LunaDenyCakesGame
             button_small = SfmlHelper.LoadSprite(@"images/button_small.png", SpriteLoaderOptions.sloCentered);
             logo = SfmlHelper.LoadSprite(@"images/logo.png", SpriteLoaderOptions.sloCentered);
             back = SfmlHelper.LoadSprite(@"images/back.png");
+            checkbox_on = SfmlHelper.LoadSprite(@"images/checkbox_on.png");
+            checkbox_off = SfmlHelper.LoadSprite(@"images/checkbox_off.png");
 
             music_main = new Music(@"music/music_main.ogg");
             music_main.Loop = true;

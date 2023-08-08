@@ -10,21 +10,26 @@ namespace LunaDenyCakesGame
     public class SceneCtrl : Scene
     {
         // Ресурсы и константы
-        private Text text;        
+        private Text text;
+        private Text text_cb;
         private int TOP = 240;
         private int STEP = 54;
         private int BUTBACK_X;
         private int BUTDEF_X;
         private int BUT_Y = 730;
+        private int CHECKBOX_X ;
+        private int CHECKBOX_Y = 648;
         private KeyConfig keyconfig;
         private int active_idx = -1;
         
         public override void Init()
         {
-            text = new Text("", CommonData.font, 22);            
+            text = new Text("", CommonData.font, 22);
+            text_cb = new Text("", CommonData.font, 18);
             keyconfig = ObjModule.opt.keyconfig;
             BUTBACK_X = ObjModule.opt.getWindowWidth() / 2 - 384 / 2 + 188 / 2;
             BUTDEF_X = ObjModule.opt.getWindowWidth() / 2 + 384 / 2 - 188 / 2;
+            CHECKBOX_X = ObjModule.opt.getWindowWidth() / 2 - 190;
         }
 
         // Проверка, входит ли курсор в позицию меню
@@ -49,6 +54,18 @@ namespace LunaDenyCakesGame
                     (y - CommonData.button_small.Texture.Size.Y / 2 < my) &&
                     (x + CommonData.button_small.Texture.Size.X / 2 > mx) &&
                     (y + CommonData.button_small.Texture.Size.Y / 2 > my));
+        }
+
+        // Проверка, входит ли курсор в позицию чекбокса
+        private bool isMousePosOverCheckBox(int x, int y)
+        {
+            int mx = getMousePosition().X;
+            int my = getMousePosition().Y;
+
+            return ((x < mx) &&
+                    (y < my) &&
+                    (x + CommonData.checkbox_off.Texture.Size.X > mx) &&
+                    (y + CommonData.checkbox_off.Texture.Size.Y > my));
         }
 
         public override void UnInit()
@@ -99,6 +116,11 @@ namespace LunaDenyCakesGame
                         if (isMousePosOverSmallButton(BUTDEF_X, BUT_Y))
                         {
                             keyconfig.setDefault();
+                            CustomOptions.customopt.setApplyAfterSelect(false);
+                        }
+                        if (isMousePosOverCheckBox(CHECKBOX_X,CHECKBOX_Y))
+                        {
+                            CustomOptions.customopt.switchApplyAfterSelect();
                         }
                     }                
             }
@@ -137,6 +159,11 @@ namespace LunaDenyCakesGame
                 CommonData.button_small.Color = CommonData.color_norm;
             DrawAt(window, CommonData.button_small, BUTDEF_X, BUT_Y);
             DrawTextCentered(window, text, ObjModule.texts.getText("menudefault"), BUTDEF_X, BUT_Y - 16);
+
+            // Тоже нужен класс чекбокса
+            DrawAt(window, CustomOptions.customopt.isApplyAfterSelect()?CommonData.checkbox_on:CommonData.checkbox_off, 
+                CHECKBOX_X, CHECKBOX_Y);
+            DrawText(window, text_cb, ObjModule.texts.getText("text_cb_apply_after_select"), CHECKBOX_X + 40, CHECKBOX_Y + 10);
 
             DrawAt(window, CommonData.logo, ObjModule.opt.getWindowWidth() / 2, 100);
 

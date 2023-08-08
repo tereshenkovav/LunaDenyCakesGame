@@ -25,6 +25,7 @@
   "text_lcm":"LCM",
   "text_mcm":"MMB",
   "text_rcm":"RCM",
+  "text_cb_apply_after_select":"Apply the action immediately after selection",
   "achievement_win_easy":"Beat the game at Low difficulty.",
   "achievement_win_medi":"Beat the game at Medium difficulty.",
   "achievement_win_hard":"Beat the game at High difficulty.",

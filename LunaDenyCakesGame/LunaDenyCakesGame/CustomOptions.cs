@@ -8,6 +8,7 @@ namespace LunaDenyCakesGame
     public class CustomOptionsParams: OptionsParams
     {
         public Difficult difficult { get; set; }
+        public bool apply_after_select { get; set; }
     }
 
     public class CustomOptions: Options
@@ -17,6 +18,7 @@ namespace LunaDenyCakesGame
         public static CustomOptions customopt;
 
         private Difficult difficult = Difficult.Medi;
+        private bool apply_after_select = false;
         public Difficult getDifficult()
         {
             return difficult;
@@ -40,14 +42,29 @@ namespace LunaDenyCakesGame
             if (difficult == Difficult.Hard) difficult = Difficult.Easy;
             SaveParam();
         }
+        public bool isApplyAfterSelect()
+        {
+            return apply_after_select;
+        }
+        public void setApplyAfterSelect(bool value)
+        {
+            apply_after_select = value;
+        }
+        public void switchApplyAfterSelect()
+        {
+            apply_after_select = !apply_after_select;
+            SaveParam();
+        }
         // Здесь добавляем загрузку дополнительных полей
         protected override void loadCustom(Object obj)
         {
             difficult = ((CustomOptionsParams)obj).difficult;
+            apply_after_select = ((CustomOptionsParams)obj).apply_after_select;
         }
         protected override void saveCustom(Object obj)
         {
             ((CustomOptionsParams)obj).difficult = difficult;
+            ((CustomOptionsParams)obj).apply_after_select = apply_after_select;
         }
     }
 }

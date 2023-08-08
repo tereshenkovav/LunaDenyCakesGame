@@ -25,6 +25,7 @@
   "text_lcm":"ЛКМ",
   "text_mcm":"СКМ",
   "text_rcm":"ПКМ",
+  "text_cb_apply_after_select":"Применять действие сразу после выбора",
   "achievement_win_easy":"Пройти игру на низкой сложности",
   "achievement_win_medi":"Пройти игру на средней сложности",
   "achievement_win_hard":"Пройти игру на высокой сложности",
