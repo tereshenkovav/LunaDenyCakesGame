@@ -3,6 +3,7 @@ using System.IO;
 using System.Diagnostics;
 using System;
 using SFML.Window;
+using SFML.Graphics;
 using System.Text.Json;
 using System.Collections.Generic;
 
@@ -47,6 +48,7 @@ namespace LunaDenyCakesGame
             ObjModule.achievementstore.LoadAchievements(localdir + Path.DirectorySeparatorChar + "achievements.json");
 
             var window = new SfmlNetEngine.Window();
+            window.SetIcon(new Image(@"images/icon.png"));
             window.Show(typeof(SceneMenu), typeof(SceneMenu));
             CommonData.UnLoad();
         }

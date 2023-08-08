@@ -20,7 +20,12 @@ namespace SfmlNetEngine
     public class Window
     {
         private List<EventArgsEx> events = new List<EventArgsEx>();
-        
+        private Image icon = null;
+
+        public void SetIcon(Image icon)
+        {
+            this.icon = icon;
+        }
         public void Show(Type initscene, Type optscene)
         {            
             VideoMode mode = new VideoMode((uint)ObjModule.opt.getWindowWidth(), (uint)ObjModule.opt.getWindowHeigth(), 32);
@@ -37,7 +42,9 @@ namespace SfmlNetEngine
                 window = new RenderWindow(mode, ObjModule.texts.getText("gametitle"), Styles.Titlebar);
             window.SetVerticalSyncEnabled(true);
             window.SetMouseCursorVisible(false);
-                            
+
+            if (icon != null) window.SetIcon(icon.Size.X, icon.Size.Y, icon.Pixels);
+
             // Привязка событий
             window.Closed += (obj, e) => { window.Close(); };
             window.KeyPressed += (sender, e) => { events.Add(new EventArgsEx(e,false)); };
