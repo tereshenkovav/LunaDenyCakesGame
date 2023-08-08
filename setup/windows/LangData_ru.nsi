@@ -2,6 +2,7 @@ LoadLanguageFile "${NSISDIR}\Contrib\Language files\Russian.nlf"
 
 LangString GameName 0 "Принцесса Луна против тортиков"
 LangString GameGameName 0 "Игра Принцесса Луна против тортиков"
+LangString PublisherName 0 "Терешенков А.В."
 LangString AfterParams 0 ": настройка"
 LangString MsgInstError 0 "Ошибка установки игры Принцесса Луна против тортиков"
 LangString MsgUninstOK 0 "Игра Принцесса Луна против тортиков успешно удалена"

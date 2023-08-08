@@ -1,3 +1,7 @@
+!ifndef GAMELANG
+  !error "Value of GAMELANG not defined"
+!endif
+
 Unicode True
 RequestExecutionLevel admin
 SetCompressor /SOLID zlib
@@ -5,7 +9,7 @@ AutoCloseWindow true
 Icon ..\..\graphics\main.ico
 XPStyle on
 
-!include StrData.nsi
+!include LangData_${GAMELANG}.nsi
 
 !include "FileFunc.nsh"
 !insertmacro GetTime
@@ -13,9 +17,9 @@ XPStyle on
 !define TEMP1 $R0 
 
 ReserveFile /plugin InstallOptions.dll
-ReserveFile "runapp.ini"
+ReserveFile "runapp_${GAMELANG}.ini"
 
-OutFile "LunaDenyCakesGame-setup-1.0.0-Win64.exe"
+OutFile "LunaDenyCakesGame-setup-${UPPERLANG}-1.0.0-Win64.exe"
 
 var is_update
 
@@ -31,7 +35,7 @@ Name $(GameGameName)
 
 Function .onInit
   InitPluginsDir
-  File /oname=$PLUGINSDIR\runapp.ini "runapp.ini"
+  File /oname=$PLUGINSDIR\runapp_${GAMELANG}.ini "runapp_${GAMELANG}.ini"
 
   StrCpy $INSTDIR $PROGRAMFILES64\LunaDenyCakesGame
 
@@ -45,7 +49,7 @@ FunctionEnd
 Function .onInstSuccess
   StrCmp $is_update "1" SkipAll
 
-  ReadINIStr ${TEMP1} "$PLUGINSDIR\runapp.ini" "Field 1" "State"
+  ReadINIStr ${TEMP1} "$PLUGINSDIR\runapp_${GAMELANG}.ini" "Field 1" "State"
   StrCmp ${TEMP1} "0" SkipDesktop
 
   SetOutPath $INSTDIR
@@ -53,7 +57,7 @@ Function .onInstSuccess
 
 SkipDesktop:
 
-  ReadINIStr ${TEMP1} "$PLUGINSDIR\runapp.ini" "Field 2" "State"
+  ReadINIStr ${TEMP1} "$PLUGINSDIR\runapp_${GAMELANG}.ini" "Field 2" "State"
   StrCmp ${TEMP1} "0" SkipRun
 
   Exec $INSTDIR\LunaDenyCakesGame.exe
@@ -86,16 +90,12 @@ Section "$(GameGameName)"
   File /r ..\..\build-LunaDenyCakesGame\*
   File ..\..\graphics\main.ico
 
-  SetOutPath $INSTDIR\fonts
-  File /r ..\..\data\fonts\*
-  SetOutPath $INSTDIR\images
-  File /r ..\..\data\images\*
-  SetOutPath $INSTDIR\music
-  File /r ..\..\data\music\*
-  SetOutPath $INSTDIR\sounds
-  File /r ..\..\data\sounds\*
   SetOutPath $INSTDIR
   File /r ..\..\data\*
+
+  FileOpen $0 "$INSTDIR\deflang" w
+  FileWrite $0 '${GAMELANG}'
+  FileClose $0
 
   StrCmp $is_update "1" Skip2
   
@@ -115,9 +115,9 @@ Section "$(GameGameName)"
                  "InstallDate"  "$2$1$0"
 
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\LunaDenyCakesGame" \
-                 "Publisher"  "Терешенков А.В."
+                 "Publisher"  "$(PublisherName)"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\LunaDenyCakesGame" \
-                 "DisplayVersion"  "0.5.0"
+                 "DisplayVersion"  "1.0.0"
 
   SetOutPath $INSTDIR
   CreateDirectory "$SMPROGRAMS\$(GameName)"
@@ -139,7 +139,7 @@ Function SetRunApp
 
   Push ${TEMP1}
 
-  InstallOptions::dialog "$PLUGINSDIR\runapp.ini"
+  InstallOptions::dialog "$PLUGINSDIR\runapp_${GAMELANG}.ini"
     Pop ${TEMP1}
   
   Pop ${TEMP1}
