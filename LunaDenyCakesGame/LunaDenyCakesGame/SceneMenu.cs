@@ -31,7 +31,7 @@ namespace LunaDenyCakesGame
         {
             items.Clear();
             items.Add(ObjModule.texts.getText("menustart"));
-            items.Add(ObjModule.texts.getText("menudiff")+" : "+ObjModule.texts.getText("text_"+ObjModule.opt.getDifficultCode()));
+            items.Add(ObjModule.texts.getText("menudiff")+" : "+ObjModule.texts.getText("text_"+CustomOptions.customopt.getDifficultCode()));
             items.Add(ObjModule.texts.getText("menuachievements")+String.Format(" ({0}/{1})",
                 ObjModule.achievementstore.getCompletedCount(),ObjModule.achievementstore.getCount()));
             items.Add(ObjModule.texts.getText("menuhelp"));
@@ -86,7 +86,7 @@ namespace LunaDenyCakesGame
                         }
                         if (isMousePosOverButton(1))
                         {
-                            ObjModule.opt.switchDifficult();
+                            CustomOptions.customopt.switchDifficult();
                             rebuildItems();
                         }
                         if (isMousePosOverButton(2))

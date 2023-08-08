@@ -12,7 +12,7 @@ namespace LunaDenyCakesGame
         public override void Update(Object obj)
         {
             Game game = (Game)obj;
-            if (game.isWin() && (ObjModule.opt.getDifficult() == Difficult.Easy)) iscompleted = true;
+            if (game.isWin() && (CustomOptions.customopt.getDifficult() == Difficult.Easy)) iscompleted = true;
         }
     }
     public class AchievementWinMedi : Achievement
@@ -24,7 +24,7 @@ namespace LunaDenyCakesGame
         public override void Update(Object obj)
         {
             Game game = (Game)obj;
-            if (game.isWin() && (ObjModule.opt.getDifficult() == Difficult.Medi)) iscompleted = true;
+            if (game.isWin() && (CustomOptions.customopt.getDifficult() == Difficult.Medi)) iscompleted = true;
         }
     }
     public class AchievementWinHard : Achievement
@@ -36,7 +36,7 @@ namespace LunaDenyCakesGame
         public override void Update(Object obj)
         {
             Game game = (Game)obj;
-            if (game.isWin() && (ObjModule.opt.getDifficult() == Difficult.Hard)) iscompleted = true;
+            if (game.isWin() && (CustomOptions.customopt.getDifficult() == Difficult.Hard)) iscompleted = true;
         }
     }
     public class AchievementWinMediChicken : Achievement
@@ -56,7 +56,7 @@ namespace LunaDenyCakesGame
         {
             Game game = (Game)obj;
             if (game.getChickenCount() > 0) ischickenused = true;
-            if (game.isWin() && (ObjModule.opt.getDifficult() == Difficult.Medi)) 
+            if (game.isWin() && (CustomOptions.customopt.getDifficult() == Difficult.Medi)) 
                 if (!ischickenused) iscompleted = true;
         }
     }
@@ -80,7 +80,7 @@ namespace LunaDenyCakesGame
             for (int i=0; i<game.getCakeCount(); i++) 
                 if (game.isCakeShieldOn(i)) isshieldused = true;
 
-            if (game.isWin() && (ObjModule.opt.getDifficult() == Difficult.Medi))
+            if (game.isWin() && (CustomOptions.customopt.getDifficult() == Difficult.Medi))
                 if (!isshieldused) iscompleted = true;
         }
     }
@@ -94,7 +94,7 @@ namespace LunaDenyCakesGame
         public override void Update(Object obj)
         {
             Game game = (Game)obj;            
-            if (game.isWin() && (ObjModule.opt.getDifficult() == Difficult.Medi))
+            if (game.isWin() && (CustomOptions.customopt.getDifficult() == Difficult.Medi))
                 if (game.getCelestiaHPin100()>=50) iscompleted = true;
         }
     }
@@ -108,7 +108,7 @@ namespace LunaDenyCakesGame
         public override void Update(Object obj)
         {
             Game game = (Game)obj;
-            if (game.isWin() && (ObjModule.opt.getDifficult() == Difficult.Easy))
+            if (game.isWin() && (CustomOptions.customopt.getDifficult() == Difficult.Easy))
                 if (game.getCelestiaHPin100() >= 75) iscompleted = true;
         }
     }

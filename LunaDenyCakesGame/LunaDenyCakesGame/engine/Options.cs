@@ -4,16 +4,13 @@ using System.Text.Json;
 using System.Collections.Generic;
 
 namespace SfmlNetEngine
-{
-    public enum Difficult { Easy, Medi, Hard };
-
+{    
     public class OptionsParams
     {
         public bool soundon { get; set; }
         public bool musicon { get; set; }
         public bool fullscreen { get; set; }
         public string currentlang { get; set; }
-        public int difficult { get; set; }
         public List<KeyInfo> keys { get; set; }
     }
 
@@ -28,8 +25,8 @@ namespace SfmlNetEngine
         private bool fullscreen = false;
         private string currentlang = "";
         private List<String> languages = new List<string>();
-        private Difficult difficult = Difficult.Medi;
         public KeyConfig keyconfig = new KeyConfig();
+        private Type paramstype;
         
         public void setWindowParams(int w, int h)
         {
@@ -70,27 +67,7 @@ namespace SfmlNetEngine
         public bool isFullScreen()
         {
             return fullscreen;
-        }
-        public Difficult getDifficult()
-        {
-            return difficult;
-        }
-        public String getDifficultCode()
-        {
-            switch (difficult) {
-                case Difficult.Easy: return "easy";
-                case Difficult.Medi: return "medi";
-                case Difficult.Hard: return "hard";
-                default: return "medi";
-            }
-        }
-        public void switchDifficult()
-        {
-            if (difficult == Difficult.Easy) difficult = Difficult.Medi; else
-            if (difficult == Difficult.Medi) difficult = Difficult.Hard; else
-            if (difficult == Difficult.Hard) difficult = Difficult.Easy;
-            SaveParam();
-        }
+        }        
         public void setUsedLanguages(List<String> langs)
         {
             languages.Clear();
@@ -127,32 +104,40 @@ namespace SfmlNetEngine
             if (File.Exists(langfilename)) return langfilename;
             return filename;
         }
-        public void LoadParams(String filename)
+        protected virtual void loadCustom(Object obj)
+        {
+
+        }
+        protected virtual void saveCustom(Object obj)
+        {
+
+        }
+        public void LoadParams(String filename, Type type) 
         {
             configfile = filename;
+            paramstype = type;
             if (File.Exists(filename))
             {
-                var obj = JsonSerializer.Deserialize<OptionsParams>(File.ReadAllText(filename));
+                var obj = (OptionsParams)JsonSerializer.Deserialize(File.ReadAllText(filename),type);
                 soundon = obj.soundon;
                 musicon = obj.musicon;
                 fullscreen = obj.fullscreen;
                 setCurrentLanguage(obj.currentlang);
-                difficult = (Difficult)obj.difficult;
                 keyconfig.setAllKeys(obj.keys);
+                loadCustom(obj);
             }
         }
         public void SaveParam()
         {
             if (configfile == "") return;
-            var obj = new OptionsParams() { 
-                soundon = soundon,
-                musicon = musicon,
-                fullscreen = fullscreen,
-                currentlang = currentlang,
-                difficult = (int)difficult,
-                keys = keyconfig.getAllKeys()
-            };
-            File.WriteAllText(configfile, JsonSerializer.Serialize(obj,new JsonSerializerOptions() { WriteIndented = true }));
+            var obj = (OptionsParams)Activator.CreateInstance(paramstype) ;
+            obj.soundon = soundon;
+            obj.musicon = musicon;
+            obj.fullscreen = fullscreen;
+            obj.currentlang = currentlang;
+            obj.keys = keyconfig.getAllKeys();
+            saveCustom(obj);
+            File.WriteAllText(configfile, JsonSerializer.Serialize(obj,paramstype, new JsonSerializerOptions() { WriteIndented = true }));
         }
     }
 }

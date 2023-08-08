@@ -102,7 +102,7 @@ namespace LunaDenyCakesGame
             lunadir = Direction.Right;
             state = GameState.Normal;
             gameovermsg = "";
-            balance = new Balance(ObjModule.opt.getDifficult());
+            balance = new Balance(CustomOptions.customopt.getDifficult());
             mana = balance.MaxMana;
             celestiadir = Direction.No;
             eaten = null;
