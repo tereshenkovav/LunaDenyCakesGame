@@ -19,7 +19,7 @@ XPStyle on
 ReserveFile /plugin InstallOptions.dll
 ReserveFile "runapp_${GAMELANG}.ini"
 
-OutFile "LunaDenyCakesGame-setup-${UPPERLANG}-1.0.0-Win64.exe"
+OutFile "LunaDenyCakesGame-setup-${UPPERLANG}-${VERSION}-Win64.exe"
 
 var is_update
 
@@ -117,7 +117,7 @@ Section "$(GameGameName)"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\LunaDenyCakesGame" \
                  "Publisher"  "$(PublisherName)"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\LunaDenyCakesGame" \
-                 "DisplayVersion"  "1.0.0"
+                 "DisplayVersion"  "${VERSION}"
 
   SetOutPath $INSTDIR
   CreateDirectory "$SMPROGRAMS\$(GameName)"

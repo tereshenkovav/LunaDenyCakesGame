@@ -5,7 +5,7 @@ exit
 
 :mainproc
 
-set ZipName=LunaDenyCakesGame-%2-1.0.0-Win64
+set ZipName=LunaDenyCakesGame-%2-%VERSION%-Win64
 
 echo %1 > ..\..\data\deflang
 

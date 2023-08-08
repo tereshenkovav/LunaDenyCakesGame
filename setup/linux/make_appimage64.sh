@@ -39,7 +39,7 @@ cp -r ../../data/* $appdir/usr/bin
 export ARCH=x86_64
 
 echo "en" > $appdir/usr/bin/deflang
-appimagetool-x86_64.AppImage $appdir /tmp/LunaDenyCakesGame-EN-1.0.0-x86_64.AppImage
+appimagetool-x86_64.AppImage $appdir /tmp/LunaDenyCakesGame-EN-1.1.0-x86_64.AppImage
 
 echo "ru" > $appdir/usr/bin/deflang
-appimagetool-x86_64.AppImage $appdir /tmp/LunaDenyCakesGame-RU-1.0.0-x86_64.AppImage
+appimagetool-x86_64.AppImage $appdir /tmp/LunaDenyCakesGame-RU-1.1.0-x86_64.AppImage
