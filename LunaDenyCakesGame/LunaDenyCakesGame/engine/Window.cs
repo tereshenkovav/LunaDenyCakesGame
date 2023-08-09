@@ -41,6 +41,7 @@ namespace SfmlNetEngine
             else
                 window = new RenderWindow(mode, ObjModule.texts.getText("gametitle"), Styles.Titlebar);
             window.SetVerticalSyncEnabled(true);
+            window.SetFramerateLimit(60);
             window.SetMouseCursorVisible(false);
 
             if (icon != null) window.SetIcon(icon.Size.X, icon.Size.Y, icon.Pixels);
