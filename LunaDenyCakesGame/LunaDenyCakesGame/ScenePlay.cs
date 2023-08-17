@@ -45,8 +45,7 @@ namespace LunaDenyCakesGame
         private int oldcelestiazoneidx;
         private List<GameAction> actions;
         private Dictionary<string,Sprite> actionsprites;
-        private int tekaction;
-        private GameAction used_action;
+        private int tekaction;        
         private const int INDICATOR_W = 48;
         private List<Effect> effects;
         private float celestia_effect_x;
@@ -116,8 +115,7 @@ namespace LunaDenyCakesGame
             actionsprites.Add(actions[2].getCode(), SfmlHelper.LoadSprite("images/action_chicken.png", SpriteLoaderOptions.sloCentered));
             actionsprites.Add(actions[3].getCode(), SfmlHelper.LoadSprite("images/action_shield.png", SpriteLoaderOptions.sloCentered));
             tekaction = 0;
-            used_action = null;
-
+            
             effects = new List<Effect>();
 
             islunawalk = false;
@@ -150,13 +148,13 @@ namespace LunaDenyCakesGame
         {
             if (isreleased)
             {
-                if (used_action != null) used_action.Finish();
+                foreach (var action in actions)
+                    action.Finish();
             }
             else
             {
                 if (actions[tekaction].Apply(getMousePosition()))
-                {
-                    used_action = actions[tekaction];
+                {                    
                     // Тоже переделать на наблюдателя или коды эффектов
                     if (actions[tekaction] is GAJump) snd_teleport.Play();
                     if (actions[tekaction] is GAChicken) snd_chicken.Play();
