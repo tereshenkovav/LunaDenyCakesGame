@@ -88,6 +88,9 @@ namespace SfmlNetEngine
 
                 if (debuginfo) window.SetTitle(String.Format("FPS: {0}",fps.getFPS()));
 
+                // Завершаем обновление игры при неактивном окне
+                if (!window.HasFocus()) continue;
+
                 // Обновление состояния игры
                 SceneResult r = tekscene.Frame(dt, events) ;
                 // Если выход, то стоп окну
@@ -113,7 +116,7 @@ namespace SfmlNetEngine
                         tekscene.Render(window);
                         window.Display();
                         break;
-                }                
+                }
             }
         }
     }
