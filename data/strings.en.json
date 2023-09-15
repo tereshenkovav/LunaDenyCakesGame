@@ -15,6 +15,7 @@
   "menudefault":"Default",
   "menureset":"Reset",
   "menumenu":"Main menu",
+  "text_pause":"Pause\n\nEscape - resume\nF10 - to menu",
   "text_win":"Victory!",
   "text_fail":"Defeat!",
   "text_on":"On",

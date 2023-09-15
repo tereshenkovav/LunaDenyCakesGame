@@ -21,6 +21,7 @@ namespace LunaDenyCakesGame
         }
         // Ресурсы и константы
         private Text text;
+        private Text text_pause;
         private Sprite block;
         private Sprite chicken;
         private Sprite chickenfallen;
@@ -57,6 +58,7 @@ namespace LunaDenyCakesGame
         private bool is_celestia_effect_mirror;
         private Color manacolor = new Color(35, 20, 250);
         private Color hpcolor = new Color(240, 240, 240);
+        private bool pause;
 
         public override void Init()
         {
@@ -99,6 +101,9 @@ namespace LunaDenyCakesGame
             shield.Origin = new Vector2f(shield.Texture.Size.X / 2, shield.Texture.Size.Y / 2);
             shield.Play();
 
+            text_pause = new Text("", CommonData.font, 24);
+            text_pause.FillColor = new Color(255, 255, 255);
+            
             colorset = new Color[] { new Color(255, 0, 0), new Color(255, 128, 0), new Color(255, 255, 0), new Color(0, 255, 0) };
 
             game = new Game();
@@ -126,6 +131,8 @@ namespace LunaDenyCakesGame
             is_celestia_effect = false;
 
             ObjModule.achievementstore.ResetDetector();
+
+            pause = false;
 
             // Добавить пул звуков для управления
             snd_galop.Volume = ObjModule.opt.isSoundOn() ? 100.0f : 0.0f;
@@ -166,14 +173,29 @@ namespace LunaDenyCakesGame
         {
             string actionname = "";
 
+            if (pause)
+            {
+                foreach (EventArgsEx args in events)
+                    if ((args.e is KeyEventArgs keyEventArg) && (!args.released)) 
+                    { 
+                        if (keyEventArg.Code == Keyboard.Key.Escape) pause = false;
+                        if (keyEventArg.Code == Keyboard.Key.F10)
+                        {
+                            setNextScene(new SceneMenu());
+                            return SceneResult.Switch;
+                        }
+                    }
+                return SceneResult.Normal;
+            }
+
             // Обход событий, для Esc - выход из игры, для мыши - вызов действия меню
             foreach (EventArgsEx args in events)
             {
                 if ((args.e is KeyEventArgs keyEventArg) && (!args.released))
                     if (keyEventArg.Code == Keyboard.Key.Escape)
                     {
-                        setNextScene(new SceneMenu());
-                        return SceneResult.Switch;
+                        pause = true;
+                        return SceneResult.Normal;
                     }
 
                 if (ObjModule.opt.keyconfig.isMatchEvent(args.e, ref actionname))
@@ -392,6 +414,20 @@ namespace LunaDenyCakesGame
                 rect.Position = new Vector2f(10, ObjModule.opt.getWindowHeigth() - rect.Size.Y);
                 rect.FillColor = hpcolor;
                 window.Draw(rect);
+            }
+
+            if (pause)
+            {
+                using (RectangleShape rect = new RectangleShape())
+                {
+                    rect.Origin = new Vector2f(0, 0);
+                    rect.OutlineThickness = 0;
+                    rect.Size = new Vector2f(300, 180);
+                    rect.Position = new Vector2f(ObjModule.opt.getWindowWidth() / 2 - 150, 240);
+                    rect.FillColor = new Color(40, 40, 40, 128);
+                    window.Draw(rect);
+                }
+                DrawTextEveryLineCentered(window, text_pause, ObjModule.texts.getText("text_pause"), ObjModule.opt.getWindowWidth() / 2, 290);
             }
 
             // Курсор

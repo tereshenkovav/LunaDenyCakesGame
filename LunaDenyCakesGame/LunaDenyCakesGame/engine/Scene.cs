@@ -94,6 +94,25 @@ namespace SfmlNetEngine
             window.Draw(text);
         }
 
+        public void DrawTextEveryLineCentered(RenderWindow window, Text text, String data, int x, int y)
+        {
+            foreach (var line in data.Split(new char[] { Convert.ToChar(13), Convert.ToChar(10) }, StringSplitOptions.None))
+            {
+                if (line.Length == 0)
+                {
+                    text.DisplayedString = "X";
+                }
+                else
+                {
+                    text.DisplayedString = line;
+                    float textWidth = text.GetLocalBounds().Width;
+                    text.Position = new Vector2f(x - textWidth / 2, y);
+                    window.Draw(text);
+                }
+                y += (int)(text.GetLocalBounds().Height+text.LineSpacing);
+            }
+        }
+
         public float GetTextWidth(Text text, String data)
         {
             text.DisplayedString = data;
