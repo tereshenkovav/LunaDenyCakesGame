@@ -21,11 +21,19 @@ namespace SfmlNetEngine
     {
         private List<EventArgsEx> events = new List<EventArgsEx>();
         private Image icon = null;
+        private Type confirmexitscene = null;
+        private bool closehandled = false;
+        private Scene prevscene = null;
 
         public void SetIcon(Image icon)
         {
             this.icon = icon;
         }
+        public void SetSceneConfirmExit(Type confirmexitscene)
+        {
+            this.confirmexitscene = confirmexitscene;
+        }
+
         public void Show(Type initscene, Type optscene)
         {            
             VideoMode mode = new VideoMode((uint)ObjModule.opt.getWindowWidth(), (uint)ObjModule.opt.getWindowHeigth(), 32);
@@ -39,7 +47,7 @@ namespace SfmlNetEngine
             if (ObjModule.opt.isFullScreen())
                 window = new RenderWindow(mode, ObjModule.texts.getText("gametitle"), Styles.Fullscreen);
             else
-                window = new RenderWindow(mode, ObjModule.texts.getText("gametitle"), Styles.Titlebar);
+                window = new RenderWindow(mode, ObjModule.texts.getText("gametitle"), Styles.Close);
             window.SetVerticalSyncEnabled(true);
             window.SetFramerateLimit(60);
             window.SetMouseCursorVisible(false);
@@ -47,7 +55,7 @@ namespace SfmlNetEngine
             if (icon != null) window.SetIcon(icon.Size.X, icon.Size.Y, icon.Pixels);
 
             // Привязка событий
-            window.Closed += (obj, e) => { window.Close(); };
+            window.Closed += (obj, e) => { closehandled = true; };
             window.KeyPressed += (sender, e) => { events.Add(new EventArgsEx(e,false)); };
             window.KeyReleased += (sender, e) => { events.Add(new EventArgsEx(e, true)); };
             window.MouseButtonPressed += (sender, e) => { events.Add(new EventArgsEx(e, false)); };
@@ -60,10 +68,11 @@ namespace SfmlNetEngine
             // Начальный цикл игры - главное меню            
             if (tekscene==null) tekscene = (Scene)Activator.CreateInstance(initscene);
             tekscene.Init();
-
+                        
             while (window.IsOpen)
-            {                
+            {
                 // Очистка событий, сбор событий, установка курсора
+                closehandled = false;
                 events.Clear();
                 window.DispatchEvents();
                 tekscene.setMousePosition(Mouse.GetPosition(window));
@@ -90,7 +99,7 @@ namespace SfmlNetEngine
 
                 // Завершаем обновление игры при неактивном окне
                 if (!window.HasFocus()) continue;
-
+                                
                 // Обновление состояния игры
                 SceneResult r = tekscene.Frame(dt, events) ;
                 // Если выход, то стоп окну
@@ -102,8 +111,16 @@ namespace SfmlNetEngine
                     // Если переключение, то переводим на другой цикл, который вернули
                     case SceneResult.Switch:
                         tekscene.UnInit();
-                        tekscene = tekscene.getNextScene();
-                        tekscene.Init();
+                        if (prevscene != null)
+                        {
+                            tekscene = prevscene;
+                            prevscene = null;
+                        }
+                        else
+                        {
+                            tekscene = tekscene.getNextScene();
+                            tekscene.Init();
+                        }
                         break;
                     case SceneResult.RebuildWindow:
                         tekscene.UnInit();
@@ -116,6 +133,24 @@ namespace SfmlNetEngine
                         tekscene.Render(window);
                         window.Display();
                         break;
+                }
+
+                if (closehandled)
+                {
+                    if (confirmexitscene == null)
+                    {
+                        window.Close();
+                        break;
+                    }
+                    else
+                    {
+                        if (tekscene.GetType() != confirmexitscene)
+                        {
+                            prevscene = tekscene;
+                            tekscene = (Scene)Activator.CreateInstance(confirmexitscene);
+                            tekscene.Init();
+                        }
+                    }
                 }
             }
         }
