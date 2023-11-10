@@ -1,4 +1,4 @@
-SET VERSION=1.1.0
+SET VERSION=1.1.1
 
 del /q ..\..\build-LunaDenyCakesGame\*
 dotnet publish ..\..\LunaDenyCakesGame\LunaDenyCakesGame\LunaDenyCakesGame.csproj -r win-x64 -c Release --self-contained -o ..\..\build-LunaDenyCakesGame
