@@ -33,7 +33,7 @@ https://nsis.sourceforge.io
 Создание архива для Windows выполняется с помощью консольной версии архиватора 
 7-Zip
 
-https://www.7-zip.org/
+https://www.7-zip.org
 
 Для создания AppImage под Linux необходим инструмент сборки AppImageKit - 
 appimagetool-x86_64.AppImage 
@@ -55,7 +55,10 @@ LunaDenyCakesGame.exe.\
 Создание архива и дистрибутива для Windows выполняется автоматически при
 запуске файла build64.bat из каталога setup/windows 
 (может потребоваться указать путь к компилятору NSIS).\
-Для создания AppImage под Linux сначала нужно выполнить файл build64.bat
-из каталога setup/linux, после чего скопировать весь каталог на 64-битную
-систему Linux и выполнить make_appimage64.sh - в каталоге /tmp
-появятся готовые образы AppImage.
+Для создания AppImage под Linux сначала нужно выполнить под Windows файл build64.bat
+из каталога setup/linux, после чего скопировать весь каталог проекта 
+(включая каталог вывода сборки build-LunaDenyCakesGame) на 64-битную
+систему Linux и выполнить в setup/linux скрипт make_appimage64.sh - в каталоге /tmp
+появятся готовые образы AppImage для 64-битной версии Linux.
+При наличии установленного dotnet на Linux можно объединить эти шаги и обойтись без
+компиляции проекта на Windows.
