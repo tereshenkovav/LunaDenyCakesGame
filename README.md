@@ -22,23 +22,18 @@
 
 ## Инструменты сборки
 
-Для сборки проекта нужен установленный NetCoreSDK 3.1 (в теории, должно работать с любой версией NET)
+Для сборки проекта нужен установленный
+[NetCoreSDK 3.1](https://dotnet.microsoft.com/en-us/download/dotnet/3.1)
+(в теории, должно работать с любой версией NET)
 
-https://dotnet.microsoft.com/en-us/download/dotnet/3.1
-
-Создание дистрибутива для Windows выполняется с помощью программы NSIS
-
-https://nsis.sourceforge.io
+Создание дистрибутива для Windows выполняется с помощью программы
+[NSIS](https://nsis.sourceforge.io)
 
 Создание архива для Windows выполняется с помощью консольной версии архиватора 
-7-Zip
-
-https://www.7-zip.org
+[7-Zip](https://www.7-zip.org)
 
 Для создания AppImage под Linux необходим инструмент сборки AppImageKit - 
-appimagetool-x86_64.AppImage 
-
-https://github.com/AppImage/AppImageKit/releases
+[appimagetool-x86_64.AppImage](https://github.com/AppImage/AppImageKit/releases)
 
 ## Сборка, запуск игры и создание дистрибутивов
 
