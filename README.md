@@ -37,16 +37,50 @@
 
 ## Сборка, запуск игры и создание дистрибутивов
 
+### Сборка
+
 Проект может быть как открыт для компиляции в Visual Studio, так и собран командой `dotnet` 
 из каталога, где находится файл `LunaDenyCakesGame.csproj`
+(т.е. `LunaDenyCakesGame/LunaDenyCakesGame` относительно корня проекта):
 
 ```
 dotnet build -c Release
 ```
+Возможно, нужно будет поставить зависимость SFML.Net:
+```
+dotnet add package SFML.Net
+```
+Если возникает ошибка типа `error NU1101: Unable to find package Microsoft.NETCore.App...`,
+то нужно поменять версию рантайма в файле `LunaDenyCakesGame.csproj`.
 
-Для запуска игры, нужно скопировать все файлы и подкаталоги из каталога `data` 
-в каталог, где расположен исполнимый файл игры, после чего запускать файл 
-`LunaDenyCakesGame.exe`.\
+Для этого сначала командой `dotnet --list-runtimes` нужно посмотреть текущую версию
+`Microsoft.NETCore.App`, а потом вписать её между тегами `<RuntimeFrameworkVersion>` и
+`</RuntimeFrameworkVersion>` вместо стоящей там по умолчанию, например, так:
+```
+<RuntimeFrameworkVersion>6.0.10</RuntimeFrameworkVersion>
+```
+
+### Запуск
+
+После сборки в подкаталоге `bin/Release/netcoreapp*` появятся все необходимые бинарные
+файлы. Помимо них, для запуска игры нужно скопировать все файлы и подкаталоги из каталога
+`data` в каталог, где расположен файл `LunaDenyCakesGame.exe`, после чего для запуска игры
+нужно запустить этот файл.
+
+Если возникает ошибка `You must install .NET to run this application.`, возможно,
+следует указать путь к dotnet с помощью переменной окружения `DOTNET_ROOT`, например, так:
+
+```
+DISPLAY=:0 DOTNET_ROOT=/opt/mcst/dotnet/dotnet/ ./LunaDenyCakesGame
+```
+
+Если игра при запуске выпадает с segmentation fault, то возможно, дело в том, что
+на выбранном дисплее не поддерживается OpenGL. Если запущенная на данном дисплее
+команда `glxinfo` говорит что-то вроде `Error: couldn't find RGB GLX visual or fbconfig`,
+то это как раз такой случай.
+
+### Создание дистрибутивов
+
 Создание архива и дистрибутива для Windows выполняется автоматически при
 запуске файла `build64.bat` из каталога `setup/windows` 
 (может потребоваться указать путь к компилятору NSIS).\
