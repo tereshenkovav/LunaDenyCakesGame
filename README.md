@@ -85,7 +85,7 @@ DISPLAY=:0 DOTNET_ROOT=/opt/mcst/dotnet/dotnet/ ./LunaDenyCakesGame
 Создание архива и дистрибутива для Windows выполняется автоматически при
 запуске файла `build64.bat` из каталога `setup/windows` 
 (может потребоваться указать путь к компилятору NSIS).\
-Для создания AppImage под Linux есть два способа:\
+Для создания AppImage под Linux есть два способа:
 
 ##### 1 - при отсутствии в Linux средств разработки NET
 
