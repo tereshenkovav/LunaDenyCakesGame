@@ -74,6 +74,9 @@ dotnet add package SFML.Net
 DISPLAY=:0 DOTNET_ROOT=/opt/mcst/dotnet/dotnet/ ./LunaDenyCakesGame
 ```
 
+Если возникает ошибка `Unable to load shared library 'csfml-graphics'`, то необходимо
+собрать и поставить [CSFML](https://github.com/SFML/CSFML).
+
 Если игра при запуске выпадает с segmentation fault, то возможно, дело в том, что
 на выбранном дисплее не поддерживается OpenGL. Если запущенная на данном дисплее
 команда `glxinfo` говорит что-то вроде `Error: couldn't find RGB GLX visual or fbconfig`,
