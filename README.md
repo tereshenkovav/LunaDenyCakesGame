@@ -15,10 +15,8 @@
 
 * `data` - каталог контента игры (графика, звуки, тексты)
 * `graphics` - иконки игры для дистрибутива и AppImage
-* `LunaDenyCakesGame` - исходный код игры в виде проектов для Visual Studio и dotnet.
-Включает зависимость SFML.Net
-* `setup` - скрипты сборки игры, а также создания дистрибутивов/архивов для Windows, 
-и AppImage для Linux
+* `LunaDenyCakesGame` - исходный код игры в виде проектов для Visual Studio и dotnet. Включает зависимость SFML.Net
+* `setup` - скрипты сборки игры, а также создания дистрибутивов/архивов для Windows, и AppImage для Linux
 
 ## Инструменты сборки
 
@@ -46,10 +44,6 @@
 ```
 dotnet build -c Release
 ```
-Возможно, нужно будет поставить зависимость SFML.Net:
-```
-dotnet add package SFML.Net
-```
 Если возникает ошибка типа `error NU1101: Unable to find package Microsoft.NETCore.App...`,
 то нужно поменять версию рантайма в файле `LunaDenyCakesGame.csproj`.
 
@@ -71,8 +65,8 @@ dotnet add package SFML.Net
 файлами (название каталога будет идентично тому, что указано как `TargetFramework` в файле
 `LunaDenyCakesGame.csproj`, по умолчанию `netcoreapp3.1`), включая в том числе файл
 `LunaDenyCakesGame.exe`. Также нужно в этот каталог скопировать все файлы и подкаталоги
-из каталога `data` (именно внутренности каталога `data`, а не сам этот каталог!),
-после чего для запуска игры нужно запустить `LunaDenyCakesGame.exe`.
+из каталога `data` (именно содержимое каталога `data`, а не сам этот каталог!),
+после чего для старта игры нужно запустить `LunaDenyCakesGame.exe`.
 
 Если возникает ошибка `You must install .NET to run this application.`, возможно,
 следует указать путь к dotnet с помощью переменной окружения `DOTNET_ROOT`, например, так:
@@ -80,9 +74,6 @@ dotnet add package SFML.Net
 ```
 DISPLAY=:0 DOTNET_ROOT=/opt/mcst/dotnet/dotnet/ ./LunaDenyCakesGame
 ```
-
-Если возникает ошибка `Unable to load shared library 'csfml-graphics'`, то необходимо
-собрать и поставить [CSFML](https://github.com/SFML/CSFML).
 
 Если игра при запуске выпадает с segmentation fault, то возможно, дело в том, что
 на выбранном дисплее не поддерживается OpenGL. Если запущенная на данном дисплее
@@ -94,10 +85,17 @@ DISPLAY=:0 DOTNET_ROOT=/opt/mcst/dotnet/dotnet/ ./LunaDenyCakesGame
 Создание архива и дистрибутива для Windows выполняется автоматически при
 запуске файла `build64.bat` из каталога `setup/windows` 
 (может потребоваться указать путь к компилятору NSIS).\
-Для создания AppImage под Linux сначала нужно выполнить под Windows файл `build64.bat`
-из каталога `setup/linux`, после чего скопировать весь каталог проекта 
+Для создания AppImage под Linux есть два способа:\
+
+##### 1 - при отсутствии в Linux средств разработки NET
+
+Сначала нужно выполнить под Windows файл `build64.bat`
+из каталога `setup/linux`, после чего скопировать весь каталог репозитория от самого корня
 (включая каталог вывода сборки `build-LunaDenyCakesGame`) на 64-битную
 систему Linux и выполнить в `setup/linux` скрипт `make_appimage64.sh` - в каталоге `/tmp`
 появятся готовые образы AppImage для 64-битной версии Linux.
-При наличии установленного dotnet на Linux можно объединить эти шаги и обойтись без
-компиляции проекта на Windows.
+
+##### 2 - при наличии в Linux средств разработки NET
+
+При наличии установленного компилятора и SDK для NET на Linux можно обойтись без 
+компиляции проекта на Windows. Сначала выполняем скрипт `build64.sh` в каталоге `setup/linux`, потом выполняем скрипт `make_appimage64.sh` в том же каталоге. Аналогично предыдущему варианту,  в каталоге `/tmp` появятся готовые образы AppImage для 64-битной версии Linux.
