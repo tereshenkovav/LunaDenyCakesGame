@@ -55,17 +55,23 @@ dotnet add package SFML.Net
 
 Для этого сначала командой `dotnet --list-runtimes` нужно посмотреть текущую версию
 `Microsoft.NETCore.App`, а потом вписать её между тегами `<RuntimeFrameworkVersion>` и
-`</RuntimeFrameworkVersion>` вместо стоящей там по умолчанию, например, так:
+`</RuntimeFrameworkVersion>`, и соответствующую версию фреймворка (можно посмотреть
+[здесь](https://learn.microsoft.com/ru-ru/dotnet/standard/frameworks) по соответствию
+с имеющейся версией dotnet) - между тегами `<TargetFramework>` и `</TargetFramework>`
+вместо стоящих там по умолчанию, например, так:
+
 ```
+<TargetFramework>net6.0</TargetFramework>
 <RuntimeFrameworkVersion>6.0.10</RuntimeFrameworkVersion>
 ```
 
 ### Запуск
 
-После сборки в подкаталоге `bin/Release/netcoreapp*` появятся все необходимые бинарные
-файлы. Помимо них, для запуска игры нужно скопировать все файлы и подкаталоги из каталога
-`data` в каталог, где расположен файл `LunaDenyCakesGame.exe`, после чего для запуска игры
-нужно запустить этот файл.
+После сборки в подкаталоге `bin/Release/` появится каталог со всеми необходимыми бинарными
+файлами (название каталога будет идентично тому, что указано как `TargetFramework` в файле
+`LunaDenyCakesGame.csproj`, по умолчанию `netcoreapp3.1`). Помимо них, для запуска игры
+нужно скопировать все файлы и подкаталоги из каталога `data` в каталог, где расположен
+файл `LunaDenyCakesGame.exe`, после чего для запуска игры нужно запустить этот файл.
 
 Если возникает ошибка `You must install .NET to run this application.`, возможно,
 следует указать путь к dotnet с помощью переменной окружения `DOTNET_ROOT`, например, так:
