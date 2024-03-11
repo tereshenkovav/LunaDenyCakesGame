@@ -80,6 +80,11 @@ DISPLAY=:0 DOTNET_ROOT=/opt/mcst/dotnet/dotnet/ ./LunaDenyCakesGame
 команда `glxinfo` говорит что-то вроде `Error: couldn't find RGB GLX visual or fbconfig`,
 то это как раз такой случай.
 
+Если возникает ошибка `Unable to load shared library 'csfml-graphics'`, то необходимо
+собрать и поставить [CSFML](https://github.com/SFML/CSFML). Это означает, что для 
+конкретного типа и версии операционной системы, SFML.Net не содержит встроенных сборок CSFML,
+но всё ещё можно заставить его работать на библиотеках csfml, самостоятельно установленных в системе.
+
 ### Создание дистрибутивов
 
 Создание архива и дистрибутива для Windows выполняется автоматически при
