@@ -9,6 +9,7 @@
   "menumusic":"Музыка",
   "menufullscreen":"Полный экран",
   "menulang":"Язык",
+  "menuabout":"О проекте",
   "menuexit":"Выход",
   "menuquit":"Выйти",
   "menurestart":"Заново",
@@ -46,5 +47,8 @@
   "action_right":"Движение вправо",
   "msg_laserfail":"Селестия поражена роголазером",
   "msg_cakeover":"Все кексики уничтожены",
-  "msg_celestiafail":"Селестия переела кексов"
+  "msg_celestiafail":"Селестия переела кексов",
+  "about_version":"{0}, коммит {1}, ветка {2}",
+  "about_info":"   Игра по мотивам MLP:FiM про Принцессу Луну, Принцессу Селестию и тортики.\nРазработано на основе C#, NET.Core и SFML.\nАвтор игры - Терешенков Александр.\nСайт автора - boosty.to/ponygames и github.com/tereshenkovav",
+  "about_credits":"Благодарности"
 }

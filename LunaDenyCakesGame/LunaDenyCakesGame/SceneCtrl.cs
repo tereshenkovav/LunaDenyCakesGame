@@ -12,13 +12,13 @@ namespace LunaDenyCakesGame
         // Ресурсы и константы
         private Text text;
         private Text text_cb;
-        private int TOP = 240;
+        private int TOP = 200;
         private int STEP = 54;
         private int BUTBACK_X;
         private int BUTDEF_X;
         private int BUT_Y = 730;
         private int CHECKBOX_X ;
-        private int CHECKBOX_Y = 648;
+        private int CHECKBOX_Y = 628;
         private KeyConfig keyconfig;
         private int active_idx = -1;
         

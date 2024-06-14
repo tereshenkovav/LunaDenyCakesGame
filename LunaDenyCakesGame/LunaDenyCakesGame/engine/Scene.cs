@@ -94,9 +94,22 @@ namespace SfmlNetEngine
             window.Draw(text);
         }
 
+        public void DrawTextCentered(RenderWindow window, Text text, int x, int y)
+        {
+            float textWidth = text.GetLocalBounds().Width;
+            text.Position = new Vector2f(x - textWidth / 2, y);
+            window.Draw(text);
+        }
+
         public void DrawTextEveryLineCentered(RenderWindow window, Text text, String data, int x, int y)
         {
-            foreach (var line in data.Split(new char[] { Convert.ToChar(13), Convert.ToChar(10) }, StringSplitOptions.None))
+            DrawTextEveryLineCentered(window, text,
+                data.Split(new char[] { Convert.ToChar(13), Convert.ToChar(10) }, StringSplitOptions.None), x, y);
+        }
+
+        public void DrawTextEveryLineCentered(RenderWindow window, Text text, IEnumerable<String> lines, int x, int y)
+        {
+            foreach (var line in lines)
             {
                 if (line.Length == 0)
                 {
@@ -109,7 +122,7 @@ namespace SfmlNetEngine
                     text.Position = new Vector2f(x - textWidth / 2, y);
                     window.Draw(text);
                 }
-                y += (int)(text.GetLocalBounds().Height+text.LineSpacing);
+                y += (int)(text.GetLocalBounds().Height + text.LineSpacing);
             }
         }
 

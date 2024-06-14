@@ -15,8 +15,8 @@ namespace LunaDenyCakesGame
         private Text text;
         private Sprite lang;
         protected List<string> items;
-        private int TOP = 240;
-        private int STEP = 54;
+        private int TOP = 200;
+        private int STEP = 52;
         
         public override void Init()
         {
@@ -43,6 +43,7 @@ namespace LunaDenyCakesGame
                 ObjModule.texts.getText(ObjModule.opt.isMusicOn() ? "text_on" : "text_off"));
             items.Add(ObjModule.texts.getText("menufullscreen") + " : " +
                 ObjModule.texts.getText(ObjModule.opt.isFullScreen() ? "text_on" : "text_off"));
+            items.Add(ObjModule.texts.getText("menuabout"));
             items.Add(ObjModule.texts.getText("menuexit"));
         }
 
@@ -128,7 +129,12 @@ namespace LunaDenyCakesGame
                             ObjModule.opt.invertFullScreen();
                             return SceneResult.RebuildWindow;
                         }
-                        if (isMousePosOverButton(9)) return SceneResult.Exit;
+                        if (isMousePosOverButton(9))
+                        {
+                            setNextScene(new SceneAbout());
+                            return SceneResult.Switch;
+                        }
+                        if (isMousePosOverButton(10)) return SceneResult.Exit;
                     }
                                 
                 }

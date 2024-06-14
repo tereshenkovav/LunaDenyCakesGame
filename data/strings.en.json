@@ -9,6 +9,7 @@
   "menumusic":"Music",
   "menufullscreen":"Fullscreen",
   "menulang":"Language",
+  "menuabout":"About",
   "menuexit":"Exit",
   "menuquit":"Quit",
   "menurestart":"Restart",
@@ -46,5 +47,8 @@
   "action_right":"Move right",
   "msg_laserfail":"Celestia has been cut in half with laser!",
   "msg_cakeover":"All cakes have been terminated!",
-  "msg_celestiafail":"Celestia has overeaten cakes!"
+  "msg_celestiafail":"Celestia has overeaten cakes!",
+  "about_version":"{0}, commit {1}, branch {2}",
+  "about_info":"   A game about Princess Luna, Princess Celestia and cakes, based on MLP:FiM\nDeveloped with C#, NET.Core and SFML.\nAuthor - Aleksandr V. Tereshenkov.\nHome pages: tav-developer.itch.io and github.com/tereshenkovav",
+  "about_credits":"Credits"
 }

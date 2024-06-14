@@ -402,3 +402,5 @@ setup/windows/*.zip
 setup/windows/*.exe
 setup/linux/*.zip
 data/deflang
+data/credits.json
+data/version.json

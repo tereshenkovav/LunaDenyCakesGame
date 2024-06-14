@@ -1,5 +1,22 @@
 #!/bin/bash
 
+for i in `git tag --list --sort=committerdate`; do BUILDTAG=$i; done
+
+for i in `git rev-parse HEAD`; do BUILDCOMMIT=$i; done
+BUILDCOMMIT=${BUILDCOMMIT:0:8}
+
+for i in `git rev-parse --abbrev-ref HEAD`; do BUILDBRANCH=$i; done
+
+echo $BUILDTAG $BUILDCOMMIT $BUILDBRANCH
+
+VERSION=${BUILDTAG:1}
+
+echo {  > ../../data/version.json
+echo \"tag\":\"$BUILDTAG\", >> ../../data/version.json
+echo \"commit\":\"$BUILDCOMMIT\", >> ../../data/version.json
+echo \"branch\":\"$BUILDBRANCH\" >> ../../data/version.json
+echo }  >> ../../data/version.json
+
 appdir=/tmp/LunaDenyCakesGame.AppDir
 
 rm -rf $appdir
@@ -39,7 +56,7 @@ cp -r ../../data/* $appdir/usr/bin
 export ARCH=x86_64
 
 echo "en" > $appdir/usr/bin/deflang
-appimagetool-x86_64.AppImage $appdir /tmp/LunaDenyCakesGame-EN-1.1.1-x86_64.AppImage
+appimagetool-x86_64.AppImage $appdir /tmp/LunaDenyCakesGame-EN-$VERSION-x86_64.AppImage
 
 echo "ru" > $appdir/usr/bin/deflang
-appimagetool-x86_64.AppImage $appdir /tmp/LunaDenyCakesGame-RU-1.1.1-x86_64.AppImage
+appimagetool-x86_64.AppImage $appdir /tmp/LunaDenyCakesGame-RU-$VERSION-x86_64.AppImage
