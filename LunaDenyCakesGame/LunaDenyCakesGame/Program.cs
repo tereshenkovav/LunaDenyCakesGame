@@ -52,7 +52,7 @@ namespace LunaDenyCakesGame
             var window = new SfmlNetEngine.Window();
             window.SetIcon(new Image(@"images/icon.png"));
             window.SetSceneConfirmExit(typeof(SceneConfirmExit));
-            window.Show(typeof(SceneMenu), typeof(SceneMenu));
+            window.Show(typeof(SceneStart), typeof(SceneMenu));
             CommonData.UnLoad();
         }
     }

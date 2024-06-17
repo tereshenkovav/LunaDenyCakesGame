@@ -64,8 +64,12 @@ namespace SfmlNetEngine
             return createSpriteFromTexture(new Texture(img, new IntRect(0, 0, (int)img.Size.X, (int)img.Size.Y)),options);
         }
         public static Color createSFMLColor(int r, int g, int b)
-        {            
-            return new Color((byte)r, (byte)g, (byte)b, 255); 
+        {
+            return createSFMLColor(r, g, b, 255);
+        }
+        public static Color createSFMLColor(int r, int g, int b, int a)
+        {
+            return new Color((byte)r, (byte)g, (byte)b, (byte)a);
         }
         public static Color createSFMLColor(String hexcolor)
         {
