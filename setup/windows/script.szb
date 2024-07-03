@@ -1,0 +1,11 @@
+SetCompressor LZMA
+SetCompressionLevel 9
+ZipFile LunaDenyCakesGame-$LANGH$-%VERSION%-Win64.zip
+
+Files ..\..\build-LunaDenyCakesGame\*
+Files ..\..\data\*
+Dir ..\..\data\fonts
+Dir ..\..\data\images
+Dir ..\..\data\music
+Dir ..\..\data\sounds
+Text $LANGL$\r\n deflang

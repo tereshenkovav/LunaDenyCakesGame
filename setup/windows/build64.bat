@@ -21,5 +21,7 @@ dotnet publish ..\..\LunaDenyCakesGame\LunaDenyCakesGame\LunaDenyCakesGame.cspro
 "C:\Program Files (x86)\NSIS\makensis.exe" /DVERSION=%VERSION% /DGAMELANG=ru /DUPPERLANG=RU LunaDenyCakesGame.nsi
 "C:\Program Files (x86)\NSIS\makensis.exe" /DVERSION=%VERSION% /DGAMELANG=en /DUPPERLANG=EN LunaDenyCakesGame.nsi
 
-call create_zip64.bat ru RU
-call create_zip64.bat en EN
+del ..\..\data\deflang
+
+SmartZipBuilder.exe script.szb /LANGL=ru /LANGH=RU
+SmartZipBuilder.exe script.szb /LANGL=en /LANGH=EN
