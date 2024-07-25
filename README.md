@@ -1,5 +1,11 @@
-Игра по мотивам MLP:FiM про Принцессу Луну, Принцессу Селестию и тортики.\
-На базе C#, NET.Core и SFML.
+# Игра по мотивам MLP:FiM про Принцессу Луну, Принцессу Селестию и тортики.
+
+[![YooMoney donation](https://img.shields.io/badge/Donation-Yoo.money-blue.svg)](https://yoomoney.ru/to/41001497003495)
+[![Boosty](https://img.shields.io/badge/Boosty-donate-orange.svg)](https://boosty.to/ponygames)
+[![Website](https://img.shields.io/badge/Website-tav--developer.itch.io-29a662.svg)](https://tav-developer.itch.io)
+[![License](https://img.shields.io/badge/License-MIT0-darkgray.svg)](#)
+[![Tag](https://img.shields.io/github/v/tag/tereshenkovav/LunaDenyCakesGame?color=00c2e8)](#)
+[![Downloads](https://img.shields.io/github/downloads/tereshenkovav/LunaDenyCakesGame/total?color=c87bff)](#)
 
 ## О проекте
 
