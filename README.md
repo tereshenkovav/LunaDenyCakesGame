@@ -43,6 +43,15 @@
 
 ### Сборка
 
+После получения файлов репозитория, нужно обновить субмодуль библиотеки `NetSfmlLib`,
+выполнив в каталоге проекта команды
+
+```
+git submodule init
+git submodule update
+
+```
+
 Проект может быть как открыт для компиляции в Visual Studio, так и собран командой `dotnet` 
 из каталога, где находится файл `LunaDenyCakesGame.csproj`
 (т.е. `LunaDenyCakesGame/LunaDenyCakesGame` относительно корня проекта):
