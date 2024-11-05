@@ -1,4 +1,4 @@
-﻿using SfmlNetEngine;
+﻿using NetSfmlLib;
 
 namespace LunaDenyCakesGame
 {

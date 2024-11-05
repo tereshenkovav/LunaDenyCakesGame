@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
-using SfmlNetEngine;
+using NetSfmlLib;
 using System.IO;
 using System.Text.Json;
 

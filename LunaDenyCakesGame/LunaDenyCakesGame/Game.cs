@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SFML.System;
-using SfmlNetEngine;
+using NetSfmlLib;
 
 namespace LunaDenyCakesGame
 {

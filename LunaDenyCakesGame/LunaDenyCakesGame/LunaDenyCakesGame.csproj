@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NetSfmlLib\NetSfmlLib\NetSfmlLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="SFML.Net" Version="2.5.0" />
     <RuntimeHostConfigurationOption Include="System.Globalization.Invariant" Value="true" />
   </ItemGroup>

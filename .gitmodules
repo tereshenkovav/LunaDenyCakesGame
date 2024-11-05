@@ -1,0 +1,3 @@
+[submodule "LunaDenyCakesGame/NetSfmlLib"]
+	path = LunaDenyCakesGame/NetSfmlLib
+	url = git@github.com:tereshenkovav/NetSfmlLib.git

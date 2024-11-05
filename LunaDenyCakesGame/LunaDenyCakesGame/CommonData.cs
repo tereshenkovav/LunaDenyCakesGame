@@ -1,6 +1,6 @@
 ﻿using SFML.Graphics;
 using SFML.Audio;
-using SfmlNetEngine;
+using NetSfmlLib;
 
 namespace LunaDenyCakesGame
 {

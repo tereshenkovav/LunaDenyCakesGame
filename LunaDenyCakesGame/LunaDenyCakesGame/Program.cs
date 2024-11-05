@@ -1,4 +1,4 @@
-﻿using SfmlNetEngine;
+﻿using NetSfmlLib;
 using System.IO;
 using System.Diagnostics;
 using System;
@@ -49,7 +49,7 @@ namespace LunaDenyCakesGame
             ObjModule.achievementstore.addAchievement(new AchievementWinEasy75());
             ObjModule.achievementstore.LoadAchievements(localdir + Path.DirectorySeparatorChar + "achievements.json");
 
-            var window = new SfmlNetEngine.Window();
+            var window = new NetSfmlLib.Window();
             window.SetIcon(new Image(@"images/icon.png"));
             window.SetSceneConfirmExit(typeof(SceneConfirmExit));
             window.Show(typeof(SceneStart), typeof(SceneMenu));
