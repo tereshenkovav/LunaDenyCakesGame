@@ -6,6 +6,7 @@ using SFML.Window;
 using SFML.Graphics;
 using System.Text.Json;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace LunaDenyCakesGame
 {
@@ -20,8 +21,13 @@ namespace LunaDenyCakesGame
             else
                 Directory.SetCurrentDirectory(args[0]);
 
-            String localdir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
-                Path.DirectorySeparatorChar + "LunaDenyCakesGame";
+            String localdir ;
+	    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                localdir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
+                   Path.DirectorySeparatorChar + "LunaDenyCakesGame";
+            else
+                localdir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) +
+                   "/.local/share/"+"LunaDenyCakesGame";
             if (!Directory.Exists(localdir)) Directory.CreateDirectory(localdir);
 
             ObjModule.opt = new CustomOptions();
