@@ -151,6 +151,27 @@ namespace LunaDenyCakesGame
             snd_chicken.Stop();
         }
 
+        // Временные процедуры для заглушки звуков при входе в меню
+        private void muteSoundOnMenu()
+        {
+            if (!ObjModule.opt.isSoundOn()) return;
+            snd_galop.Volume = 0.0f;
+            snd_galop2.Volume = 0.0f;
+            snd_laser.Volume = 0.0f;
+            snd_teleport.Volume = 0.0f;
+            snd_chicken.Volume = 0.0f;
+        }
+
+        private void unMuteSoundOnMenu()
+        {
+            if (!ObjModule.opt.isSoundOn()) return;
+            snd_galop.Volume = 100.0f;
+            snd_galop2.Volume = 100.0f;
+            snd_laser.Volume = 100.0f;
+            snd_teleport.Volume = 100.0f;
+            snd_chicken.Volume = 100.0f;
+        }
+
         private void processAction(bool isreleased)
         {
             if (isreleased)
@@ -187,6 +208,10 @@ namespace LunaDenyCakesGame
                     }
                 return SceneResult.Normal;
             }
+            else
+            {
+                unMuteSoundOnMenu();
+            }
 
             // Обход событий, для Esc - выход из игры, для мыши - вызов действия меню
             foreach (EventArgsEx args in events)
@@ -195,6 +220,7 @@ namespace LunaDenyCakesGame
                     if (keyEventArg.Code == Keyboard.Key.Escape)
                     {
                         pause = true;
+                        muteSoundOnMenu();
                         return SceneResult.Normal;
                     }
 
